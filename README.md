@@ -8,8 +8,10 @@ import org.bbi.linuxjoy.*;
 Initialization and using the provided polling thread:
 ```java
 LinuxJoystick j = JoyFactory.getFirstUsableDevice();
-j.setCallback(new EventCallbackHandler());
-j.startPollingThread(5);
+if(j != null) {
+	j.setCallback(new EventCallbackHandler());
+	j.startPollingThread(5);
+}
 ```
 
 Callback handler class:
