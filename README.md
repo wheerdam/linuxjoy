@@ -45,7 +45,7 @@ j.stopPollingThread(); // if being used
 j.close();
 ```
 
-Any block poll() will be interrupted when close() is called.
+Any blocking poll() will be interrupted when close() is called.
 
 ## Other Platforms
 
