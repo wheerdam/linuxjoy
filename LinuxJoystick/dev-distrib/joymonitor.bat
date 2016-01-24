@@ -1,0 +1,1 @@
+java -cp .\LinuxJoystick.jar;.\JoyMonitor.jar -Djava.library.path=. joymonitor.Main
