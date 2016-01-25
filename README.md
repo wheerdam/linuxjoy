@@ -48,7 +48,7 @@ class EventCallbackHandler implements LinuxJoystickEventCallback {
 }
 ```
 
-An alternative to using the callback handler is to write your own polling thread by calling the poll() function of LinuxJoystick and checking the axis and button states immediately after the poll. The poll() function is a blocking function when no native library is being used.
+An alternative to using the callback handler is to write your own polling thread by calling the `poll()` function of LinuxJoystick and checking the axis and button states immediately after the poll. The `poll()` function is a blocking function when no native library is being used.
 
 To close the device, call the following functions:
 ```java
@@ -56,10 +56,16 @@ j.stopPollingThread(); // if being used
 j.close();
 ```
 
-Any blocking poll() will be interrupted when close() is called.
+Any blocking `poll()` will be interrupted when `close()` is called.
+
+## Building the Library
+
+You will need a JDK and `ant` to build the library. If they're configured properly, you can just go into the LinuxJoystick directory and run `ant jar`. The compiled library will be in the `LinuxJoystick/dist` directory.
 
 ## Other Platforms
 
 A native library for Windows is available. This native library uses the XInput API to interface with any Xbox controllers connected to the Windows machine. The JoyFactory class hides the native implementation which allows your Java programs that use LinuxJoystick to be, at least ostensibly, a cross-platform program (no different codepaths for different platforms).
 
 Note: the poll() function of the native library is non-blocking and will return immediately. As long as your Java program uses the polling thread, this should be a minor issue other than an increase in CPU usage.
+
+The native library development files are in the `LinuxJoystick/native` directory. `org_bbi_linuxjoy_NoJoy.h` is the header that has the JNI function signatures of the Java native functions. `winxinput.cpp` is the C++ source that implements this interface and uses Windows XInput API to access the game controllers. A Visual C++ 2015 solution is provided in `LinuxJoystick/native/njnative` to build the DLL.
