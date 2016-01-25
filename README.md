@@ -68,4 +68,8 @@ A native library for Windows is available. This native library uses the XInput A
 
 Note: the poll() function of the native library is non-blocking and will return immediately. As long as your Java program uses the polling thread, this should be a minor issue other than an increase in CPU usage.
 
-The native library development files are in the `LinuxJoystick/native` directory. `org_bbi_linuxjoy_NoJoy.h` is the header that has the JNI function signatures of the Java native functions. `winxinput.cpp` is the C++ source that implements this interface and uses Windows XInput API to access the game controllers. A Visual C++ 2015 solution is provided in `LinuxJoystick/native/njnative` to build the DLL.
+The native library development files are in the `LinuxJoystick/native` directory. `org_bbi_linuxjoy_NoJoy.h` is the header that has the JNI function signatures of the Java native functions. `winxinput.cpp` is the C++ source that implements this interface and uses Windows XInput API to access the game controllers. A Visual Studio 2015 solution is provided in `LinuxJoystick/native/njnative` to build the DLL.
+
+## Always Use Native Library
+
+You can force LinuxJoystick to use the native library in your Java program by omitting JoyFactory and using the native interface directly. Instead of using `JoyFactory.enumerate()` and `JoyFactory.get(index)` to enumerate and get a handle to your device, you use `NoJoy.getEnumeration()` and `NoJoy.get(index)`. `NoJoy` is a subclass of `LinuxJoystick` that uses the native library functions to read the device data instead of the `FileChannel` implementation that the superclass uses in Linux.
