@@ -83,7 +83,7 @@ The joystick information has the following encoding for each byte:
 
 ## Other Platforms
 
-A native library for Windows is available. This native library uses the XInput API to interface with any Xbox controllers connected to the Windows machine. The JoyFactory class hides the native implementation which allows your Java programs that use LinuxJoystick to be, at least ostensibly, a cross-platform program (no different codepaths for different platforms).
+LinuxJoystick has a native library interface and a Windows implementation to access Xbox controllers has been written. The JoyFactory class hides the native implementation which allows your Java programs that use LinuxJoystick to be, at least ostensibly, a cross-platform program (no different codepaths for different platforms).
 
 Note: the poll() function of the native library is non-blocking and will return immediately. As long as your Java program uses the polling thread, this should be a minor issue other than an increase in CPU usage.
 
