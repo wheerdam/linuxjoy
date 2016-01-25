@@ -60,7 +60,7 @@ Any blocking `poll()` will be interrupted when `close()` is called.
 
 ## Building the Library
 
-You will need a JDK and `ant` to build the library. If they're configured properly, you can just go into the LinuxJoystick directory and run `ant jar`. The compiled library will be in the `LinuxJoystick/dist` directory. You can package LinuxJoystick with your own program however you see fit. You just have to make sure that `LinuxJoystick.jar` or its contents are in your classpath when compiling your program.
+You will need a JDK and `ant` to build the library. If they're configured properly, you can just go into the LinuxJoystick directory and run `ant jar`. The compiled library will be in the `LinuxJoystick/dist` directory. You can package LinuxJoystick with your own program however you see fit. You just have to make sure that `LinuxJoystick.jar` or its contents are in your classpath when compiling and running your program.
 
 ## Device Enumeration
 
