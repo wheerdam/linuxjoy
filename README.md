@@ -13,7 +13,7 @@ Initialization and using the provided polling thread:
 LinuxJoystick j = JoyFactory.getFirstUsableDevice();
 if(j != null) {
 	j.setCallback(new EventCallbackHandler());
-	j.startPollingThread(5);
+	j.startPollingThread(5); // sleep for 5 ms between polls
 }
 ```
 
