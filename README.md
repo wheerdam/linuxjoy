@@ -62,6 +62,24 @@ Any blocking `poll()` will be interrupted when `close()` is called.
 
 You will need a JDK and `ant` to build the library. If they're configured properly, you can just go into the LinuxJoystick directory and run `ant jar`. The compiled library will be in the `LinuxJoystick/dist` directory.
 
+## Device Enumeration
+
+To get a list of devices that the library detects, do the following:
+
+```java
+int[] joyInfo = JoyFactory.enumerate();
+if(joyInfo != null) {
+	// iterate through the array
+}
+```
+
+The joystick information has the following encoding for each byte:
+| 3 |        2       |         1         |  0 |
+|---|----------------|-------------------|----|
+| - | Number of Axes | Number of Buttons | ID |
+
+`JoyFactory.enumerate()` will return a value of -1 if it is unable to gather information about the controller. Use `JoyFactory.get(index)` to get a `LinuxJoystick` handle to the device and start jamming.
+
 ## Other Platforms
 
 A native library for Windows is available. This native library uses the XInput API to interface with any Xbox controllers connected to the Windows machine. The JoyFactory class hides the native implementation which allows your Java programs that use LinuxJoystick to be, at least ostensibly, a cross-platform program (no different codepaths for different platforms).
