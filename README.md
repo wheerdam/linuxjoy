@@ -94,7 +94,7 @@ The native library development files are in the `LinuxJoystick/native` directory
 Make sure the native library is in your Java library path (`java.library.path` property). For example, if your Java program, the LinuxJoystick library, and the Windows native library (`njnative.dll`) are in the same directory, you can use the following command to run your program in Windows:
 
 ```
-java -cp LinuxJoystick.jar;YourProgram.jar -Djava.library.path=. yourpackage.Main
+java -cp LinuxJoystick.jar;YourProgram.jar -Djava.library.path=. yourpackage.YourProgram
 ```
 
 Or if your program is a single class file (e.g. `YourProgram.class`):
