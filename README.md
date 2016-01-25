@@ -74,9 +74,10 @@ if(joyInfo != null) {
 ```
 
 The joystick information has the following encoding for each byte:
-| 3 |        2       |         1         |  0 |
-|---|----------------|-------------------|----|
-| - | Number of Axes | Number of Buttons | ID |
+
+|  3  |        2       |         1         |  0   |
+|:---:|:--------------:|:-----------------:|:----:|
+|  -  | Number of Axes | Number of Buttons |  ID  |
 
 `JoyFactory.enumerate()` will return a value of -1 if it is unable to gather information about the controller. Use `JoyFactory.get(index)` to get a `LinuxJoystick` handle to the device and start jamming.
 
