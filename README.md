@@ -105,4 +105,4 @@ java -cp LinuxJoystick.jar;. -Djava.library.path=. YourProgram
 
 ### Force Use Native Library
 
-You can force LinuxJoystick to use the native library in your Java program by omitting JoyFactory and using the native interface directly. Instead of using `JoyFactory.enumerate()` and `JoyFactory.get(index)` to enumerate and get a handle to your device, you use `NoJoy.getEnumeration()` and `NoJoy.get(index)`. `NoJoy` is a subclass of `LinuxJoystick` that uses the native library functions to read the device data instead of the `FileChannel` implementation that the superclass uses in Linux.
+You can force LinuxJoystick to use the native library in your Java program by omitting JoyFactory and using the native interface directly. Instead of using `JoyFactory.enumerate()` and `JoyFactory.get(index)` to enumerate and get a handle to your device, you use `NoJoy.getEnumeration()` and `LinuxJoystick j = new NoJoy(index)`. `NoJoy` is a subclass of `LinuxJoystick` that uses the native library functions to read the device data instead of the `FileChannel` implementation that the superclass uses in Linux.
