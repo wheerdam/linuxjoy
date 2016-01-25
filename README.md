@@ -83,9 +83,9 @@ The joystick information has the following encoding for each byte:
 
 ## Other Platforms
 
-LinuxJoystick has a native library interface and a Windows implementation to access Xbox controllers has been written. The JoyFactory class hides the native implementation which allows your Java programs that use LinuxJoystick to be, at least ostensibly, a cross-platform program (no different codepaths for different platforms).
+LinuxJoystick has a native library interface and a Windows implementation to access Xbox controllers. The `JoyFactory` class hides the native implementation which allows your Java programs that use LinuxJoystick to be, at least ostensibly, a cross-platform program (no different codepaths for different platforms).
 
-Note: the poll() function of the native library is non-blocking and will return immediately. As long as your Java program uses the polling thread, this should be a minor issue other than an increase in CPU usage.
+Note: the `poll()` function of the native library is non-blocking and will return immediately. As long as your Java program uses the polling thread, this should be a minor issue other than an increase in CPU usage.
 
 The native library development files are in the `LinuxJoystick/native` directory. `org_bbi_linuxjoy_NoJoy.h` is the header that has the JNI function signatures of the Java native functions. `winxinput.cpp` is the C++ source that implements this interface and uses Windows XInput API to access the game controllers. A Visual Studio 2015 solution is provided in `LinuxJoystick/native/njnative` to build the `njnative.dll` Windows library.
 
