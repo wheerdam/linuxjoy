@@ -1,5 +1,8 @@
 # linuxjoy
-LinuxJoystick is a Java joystick input library. The library exposes device enumeration function, device polling, and event handling mechanism. The following is an example code that uses the library:
+
+LinuxJoystick is a Java joystick input library. The library provides Joystick input device enumeration function, device polling, and an event handling mechanism. Contrary to its name, LinuxJoystick can be used in other platforms without having to modify the user Java program. This is accomplished using native libraries. LinuxJoystick will function with just the JRE in Linux unless the user prefers an in-house native implementation.
+
+The following is an example code that uses the library:
 
 ```java
 import org.bbi.linuxjoy.*;
@@ -14,7 +17,7 @@ if(j != null) {
 }
 ```
 
-Callback handler class:
+Callback handler class with a function that is called whenever a joystick event has occured:
 ```java
 class EventCallbackHandler implements LinuxJoystickEventCallback {
 	public void callback(LinuxJoystick j, LinuxJoystickEvent ev) {
@@ -35,6 +38,12 @@ class EventCallbackHandler implements LinuxJoystickEventCallback {
 				// handle button 1 press here
 				break;
 		}
+		
+		switch(ev.isButtonUp()) {
+			case 1:
+				// handle button 1 release here
+				break;
+		}
 	}
 }
 ```
@@ -51,4 +60,6 @@ Any blocking poll() will be interrupted when close() is called.
 
 ## Other Platforms
 
-A native library for Windows is available. This native library uses the XInput API to interface with any Xbox controllers connected to the Windows machine. The poll() function of the native library is non-blocking and will return immediately.
+A native library for Windows is available. This native library uses the XInput API to interface with any Xbox controllers connected to the Windows machine. The JoyFactory class hides the native implementation which allows your Java programs that use LinuxJoystick to be, at least ostensibly, a cross-platform program (no different codepaths for different platforms).
+
+Note: the poll() function of the native library is non-blocking and will return immediately. As long as your Java program uses the polling thread, this should be a minor issue other than an increase in CPU usage.
