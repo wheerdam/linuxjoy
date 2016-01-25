@@ -48,7 +48,7 @@ class EventCallbackHandler implements LinuxJoystickEventCallback {
 }
 ```
 
-An alternative to using the callback handler is to write your own polling thread by calling the poll() function of LinuxJoystick and checking the axis and button states directly after the poll. The poll() function is a blocking function when no native library is being used.
+An alternative to using the callback handler is to write your own polling thread by calling the poll() function of LinuxJoystick and checking the axis and button states immediately after the poll. The poll() function is a blocking function when no native library is being used.
 
 To close the device, call the following functions:
 ```java
