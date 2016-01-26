@@ -186,7 +186,7 @@ public class LinuxJoystick {
 		try {
 			if(nread == n) { // buffer empty, we're not dealing with a torn read
 				nread = 0;
-		buf.clear();
+				buf.clear();
 				n = channelRead();
 			}
 			while(nread != n && n != -1) {
@@ -212,10 +212,9 @@ public class LinuxJoystick {
 					
 					nread += (8-ibuf_index);
 					ibuf_index = 0;  // we have one complete event
-			if(callback != null) {
-			//System.out.println(ev);
-			callback.callback(this, ev);
-			}
+					if(callback != null) {
+						callback.callback(this, ev);
+					}
 
 				// in case the data is torn between reads, save our internal
 				// buffer position
