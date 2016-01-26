@@ -11,6 +11,28 @@ This document describes the LinuxJoystick Library API. The description includes 
 LinuxJoystick j = new LinuxJoystick("/dev/input/js0", 11, 8);
 ```
 
+The following is a list of `LinuxJoystick` functions:
+
+```java
+public void poll()
+public void open(String path, int buttons, int axes)
+public void reset()
+public void close()
+public void setButtonsAxes(int buttons, int axes)
+
+public boolean isDeviceOpen()
+public int getNumButtons()
+public int getNumAxes()
+public int getAxisState(int index)
+public int getButtonState(int index)
+public boolean isChanged()
+
+public void setCallback(LinuxJoystickEventCallback cb)
+public void setCloseCallback(LinuxJoystickEventCallback cb)
+public void startPollingThread(int interval_ms)
+public void stopPollingThread()
+```
+
 The `poll()` function then can be called to read any new data that the kernel driver writes out through the device file. `LinuxJoystick` will read this data and update the state of the joystick accordingly. `LinuxJoystick` uses `FileChannel` to open and read the device file. The `FileChannel` class allows an interruptible blocking read on the file. A thread should be utilized to regularly poll the controller so `LinuxJoystick` will not block the flow of the rest of the program when it is being polled.
 
 The function `setButtonsAxes(int buttons, int axes)` can be used to update the number of buttons and axes that the controller has. This function is useful because in some cases it is possible to determine the number of buttons and axes after the device has been opened. In the case of Linux, the kernel driver will send synthetic initial state packets that can be used to determine the number of buttons and axes of the controller. See the [Linux Joystick API documentation](https://www.kernel.org/doc/Documentation/input/joystick-api.txt) for details.
