@@ -4,14 +4,7 @@ This document describes the LinuxJoystick Library API. The description includes 
 
 ## The LinuxJoystick Class
 
-`LinuxJoystick` is a Java class that can be used to interface with a Joystick device in Linux. The constructor for the class takes the path to the Joystick device file and the number of buttons and axes that the controller has. The following is an example initialization of the class:
-
-```java
-// get a controller with 11 buttons and 8 axes on /dev/input/js0 
-LinuxJoystick j = new LinuxJoystick("/dev/input/js0", 11, 8);
-```
-
-The following is a list of `LinuxJoystick` functions:
+`LinuxJoystick` is a Java class that can be used to interface with a Joystick device in Linux. The constructor for the class takes the path to the Joystick device file and the number of buttons and axes that the controller has. The following is a list of `LinuxJoystick` functions:
 
 ```java
 public void poll()
@@ -31,6 +24,13 @@ public void setCallback(LinuxJoystickEventCallback cb)
 public void setCloseCallback(LinuxJoystickEventCallback cb)
 public void startPollingThread(int interval_ms)
 public void stopPollingThread()
+```
+
+The following is an example initialization of the class:
+
+```java
+// get a controller with 11 buttons and 8 axes on /dev/input/js0 
+LinuxJoystick j = new LinuxJoystick("/dev/input/js0", 11, 8);
 ```
 
 The `poll()` function then can be called to read any new data that the kernel driver writes out through the device file. `LinuxJoystick` will read this data and update the state of the joystick accordingly. `LinuxJoystick` uses `FileChannel` to open and read the device file. The `FileChannel` class allows an interruptible blocking read on the file. A thread should be utilized to regularly poll the controller so `LinuxJoystick` will not block the flow of the rest of the program when it is being polled.
@@ -118,6 +118,8 @@ The subclass then can override the `channelOpen()` function to actually open the
 ### Data Read and channelRead()
 
 `buf` is an 8KB buffer that is used by `LinuxJoystick` to process the event data. The subclass will need to fill this buffer by overriding the `channelRead()` function. `channelRead()` also needs to return the number of bytes that were read. The subclass can call a `close()` from `channelRead()` if it determines that the device has been closed / becomes unavailable while reading. The subclass' implementation of `channelRead()` **must** follow the Linux Joystick API packets when filling this buffer (it's why the library is called LinuxJoystick after all). Please mind the machine's endianness when serializing the data. Check for `LinuxJoystickEvent.ENDIANNESS` to figure out what endian the rest of the framework will use when decoding the data.
+
+If the subclass' `channelRead()` is a blocking operation, **it must be interruptible by `channelClose()`**. Making `channelRead()` non-blocking is safe to do and will not break the rest of the `LinuxJoystick` framework. The function will just have to make sure that it returns a zero if it did not read in any data. `LinuxJoystick` can also handle torn reads, i.e. a packet split into two `channelRead()` calls, so the subclass implementation can always immediately return with whatever it currently has.
 
 ### Closing the Device
 
