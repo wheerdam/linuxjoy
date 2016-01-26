@@ -79,9 +79,11 @@ public int channelRead() { ... }
 public void channelClose() { ... }
 ```
 
-`fc` is the channel object that is used by `LinuxJoystick` to open and read the Linux joystick device. If the user subclass does not use channels, this member can be ignored completely. This object is only used in the overridable `channelOpen()`, `channelRead()`, and `channelClose()` functions in `LinuxJoystick`.
+### Data Source Identifier and channelOpen()
 
-The `path` member is the resource identifier (path to device file for `LinuxJoystick`). In some cases the subclass only needs a numerical identifier. If this is the case, the identifier will still need to be stored as a `String` and only casted to an integer when it is actually being used. `LinuxJoystick` does not have an empty constructor, so a `super` must be passed on in the subclass' constructor, e.g.:
+`fc` is the channel object that is used by `LinuxJoystick` to open and read the Linux joystick device. If the user subclass does not use channels, this member can be ignored completely. 
+
+The `path` member is the resource identifier (e.g. path to device file for `LinuxJoystick`). In some cases the subclass only needs a numerical identifier. If this is the case, the identifier will still need to be stored as a `String` and only casted to an integer when it is actually being used. `LinuxJoystick` does not have an empty constructor, so a `super` must be passed on in the subclass' constructor, e.g.:
 
 ```java
 public LinuxJoystickSubclass(int identifier, int buttons, int axes) {
@@ -89,9 +91,13 @@ public LinuxJoystickSubclass(int identifier, int buttons, int axes) {
 }
 ```
 
-The subclass then can override the `channelOpen()` function to actually open the data source identified by `path`. `channelOpen()` will need to return True if the data source is successfully opened and False otherwise. Returning False from `channelOpen()` will cause the `deviceOpen` member to be set as false, signifying to the rest of the class that this joystick reference is not open.
+The subclass then can override the `channelOpen()` function to actually open the data source identified by `path`. `channelOpen()` will need to return `true` if the data source is successfully opened and `false` otherwise. Returning `false` from `channelOpen()` will cause the `deviceOpen` member to be set as false, signifying to the rest of the class that this joystick reference is not open.
+
+### Data Read and channelRead()
 
 `buf` is an 8KB buffer that is used by `LinuxJoystick` to process the event data. The subclass will need to fill this buffer by overriding the `channelRead()` function. `channelRead()` also needs to return the number of bytes that were read. The subclass can call a `close()` from `channelRead()` if it determines that the device has been closed / becomes unavailable while reading. The subclass' implementation of `channelRead()` **must** follow the Linux Joystick API packets when filling this buffer (it's why the library is called LinuxJoystick after all). Please mind the machine's endianness when serializing the data. Check for `LinuxJoystickEvent.ENDIANNESS` to figure out what endian the rest of the framework will use when decoding the data.
+
+### Closing the Device
 
 Finally, the subclass will need to override `channelClose()` to clean up resources when the user determines that the input device is no longer needed.
 
