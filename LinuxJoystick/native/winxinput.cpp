@@ -24,6 +24,8 @@
 #define XBOX_JOYINFO 0x080B01
 
 #define KEY_DEADZONE 0
+#define KEY_VIBRATION 1
+#define KEY_VERSION 2
 
 /*
 We use this particular version of the library so this dll will work in Windows 7
@@ -291,18 +293,42 @@ JNIEXPORT jintArray JNICALL Java_org_bbi_linuxjoy_NoJoy_enumerate
 	return joyInfo;
 }
 
-JNIEXPORT void JNICALL Java_org_bbi_linuxjoy_NoJoy_closeNativeDevice
+JNIEXPORT jboolean JNICALL Java_org_bbi_linuxjoy_NoJoy_closeNativeDevice
   (JNIEnv *env, jobject obj, jint index)
 {
-	// bye!
+	// MAKE HIM STAY, MURPH!
+	// we don't need to de-acquire / etc. with XInput
+	return JNI_TRUE;
 }
 
-JNIEXPORT void JNICALL Java_org_bbi_linuxjoy_NoJoy_setNativeProperty
+JNIEXPORT jbyteArray JNICALL Java_org_bbi_linuxjoy_NoJoy_setNativeProperty
 (JNIEnv *env, jclass cls, jint index, jint key, jint val)
 {
+	jbyte r = -1;
+
 	if (key == KEY_DEADZONE) {
 		hardDeadZone = (WORD)val;
+		r = 0;
 	}
+	else if (key == KEY_VIBRATION && index >= 0 && index < 4) {
+		XINPUT_VIBRATION vibration;
+		ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+		vibration.wRightMotorSpeed = (WORD) (val & 0xFFFF);
+		vibration.wLeftMotorSpeed = (WORD)((val>>16) & 0xFFFF);
+		XInputSetState(index, &vibration);
+		r = 0;
+	}
+	else if (key == KEY_VERSION) {
+		jbyte rv[] = { 0x01, 0x00, 0x00, 0x00 };
+		jbyteArray versionReturn = env->NewByteArray(4);
+		env->SetByteArrayRegion(versionReturn, 0, 4, rv);
+		return versionReturn;
+
+	}
+
+	jbyteArray errorReturn = env->NewByteArray(1);
+	env->SetByteArrayRegion(errorReturn, 0, 1, &r);
+	return errorReturn;
 }
 
 JNIEXPORT jstring JNICALL Java_org_bbi_linuxjoy_NoJoy_getVersionString

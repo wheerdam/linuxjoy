@@ -46,17 +46,17 @@ JNIEXPORT jintArray JNICALL Java_org_bbi_linuxjoy_NoJoy_enumerate
 /*
  * Class:     org_bbi_linuxjoy_NoJoy
  * Method:    closeNativeDevice
- * Signature: (I)V
+ * Signature: (I)Z
  */
-JNIEXPORT void JNICALL Java_org_bbi_linuxjoy_NoJoy_closeNativeDevice
+JNIEXPORT jboolean JNICALL Java_org_bbi_linuxjoy_NoJoy_closeNativeDevice
   (JNIEnv *, jobject, jint);
 
 /*
  * Class:     org_bbi_linuxjoy_NoJoy
  * Method:    setNativeProperty
- * Signature: (III)V
+ * Signature: (III)[B
  */
-JNIEXPORT void JNICALL Java_org_bbi_linuxjoy_NoJoy_setNativeProperty
+JNIEXPORT jbyteArray JNICALL Java_org_bbi_linuxjoy_NoJoy_setNativeProperty
   (JNIEnv *, jclass, jint, jint, jint);
 
 /*

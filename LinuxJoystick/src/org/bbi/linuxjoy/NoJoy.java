@@ -36,7 +36,7 @@ public class NoJoy extends LinuxJoystick {
 	private native boolean openNativeDevice(int index);
 	private native boolean isNativeDeviceOpen(int index);
 	private static native int[] enumerate();
-	private native void closeNativeDevice(int index);
+	private native boolean closeNativeDevice(int index);
 
 	/**
 	 * Set a native property for the library. This is a very non-portable
@@ -45,8 +45,9 @@ public class NoJoy extends LinuxJoystick {
 	 * @param index Library-defined index
 	 * @param key Library-defined property key
 	 * @param value Library-defined property value
+	 * @return the native function may return a byte array
 	 */
-	public static native void setNativeProperty(int index, int key, int val);
+	public static native byte[] setNativeProperty(int index, int key, int val);
 
 	/**
 	 * Get a version information from the native library. Use this function
@@ -143,7 +144,11 @@ public class NoJoy extends LinuxJoystick {
 				fc.close();
 			}
 			if(LINK_SATISFIED) {
-				closeNativeDevice(deviceIndex);
+				if(!closeNativeDevice(deviceIndex)) {
+					System.err.println(this + ": native device close error");
+				} else {
+					System.out.println(this + ": native device closed");
+				}
 			}
 		} catch(IOException ioe) {
 			System.err.println(this + ": close I/O exception: " + ioe.getMessage());

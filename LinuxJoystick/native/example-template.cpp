@@ -26,13 +26,13 @@ JNIEXPORT jintArray JNICALL Java_org_bbi_linuxjoy_NoJoy_enumerate
 
 }
 
-JNIEXPORT void JNICALL Java_org_bbi_linuxjoy_NoJoy_closeNativeDevice
+JNIEXPORT jboolean JNICALL Java_org_bbi_linuxjoy_NoJoy_closeNativeDevice
   (JNIEnv *env, jobject obj, jint index)
 {
 
 }
 
-JNIEXPORT void JNICALL Java_org_bbi_linuxjoy_NoJoy_setNativeProperty
+JNIEXPORT jbyteArray JNICALL Java_org_bbi_linuxjoy_NoJoy_setNativeProperty
   (JNIEnv *env, jclass cls, jint index, jint index, jint index)
 {
 

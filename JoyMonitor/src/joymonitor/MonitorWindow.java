@@ -374,12 +374,24 @@ public class MonitorWindow extends javax.swing.JFrame {
 
 	private void btnSetNativePropertyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetNativePropertyActionPerformed
 		String tokens[] = txtNativeProperty.getText().split(",");
+		byte returnVal[];
 		if(tokens.length == 3) {
 			try {
+				txtNativeMessage.setText("Return: ");
 				int index = Integer.parseInt(tokens[0].trim());
 				int key = Integer.parseInt(tokens[1].trim());
-				int value = Integer.parseInt(tokens[2].trim());
-				NoJoy.setNativeProperty(index, key, value);
+				long value;
+				if(tokens[2].startsWith("0x")) {
+					value = Long.parseLong(tokens[2].replaceAll("0x",""), 16);
+				} else {
+					value = Long.parseLong(tokens[2]);
+				}
+				returnVal = NoJoy.setNativeProperty(index, key, (int) (value & 0xffffffffL) );
+				if(returnVal.length > 0) {
+					for(int i = 0; i < returnVal.length; i++) {
+						appendNativeMessage(String.format("%02X ", returnVal[i]));
+					}
+				}
 			} catch(Exception e) {
 				System.err.println("Failed to parse: " + e.getMessage());
 			}
@@ -404,6 +416,11 @@ public class MonitorWindow extends javax.swing.JFrame {
 				txtStreamOutput.setText(txtStreamOutput.getText() + "\n" + ev);
 				txtStreamOutput.setCaretPosition(txtStreamOutput.getText().length()-1);
 		}
+	}
+
+	public void appendNativeMessage(String str) {
+		txtNativeMessage.setText(txtNativeMessage.getText() + str);
+		txtNativeMessage.setCaretPosition(txtNativeMessage.getText().length()-1);
 	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
