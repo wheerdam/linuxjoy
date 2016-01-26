@@ -1,12 +1,19 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+	Copyright 2016 Wira Mulia
 
-/*
- * MonitorWindow.java
- *
- * Created on Jan 23, 2016, 5:14:03 PM
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
  */
 
 package joymonitor;
@@ -50,9 +57,10 @@ public class MonitorWindow extends javax.swing.JFrame {
 
         if(j != null) {
             j.setCallback(null);
-            j.stopPollingThread();
+            j.setCloseCallback(null);
             j.close();
             j = null;
+            btnClose.setEnabled(false);
         }
 
         int[] joyInfo = JoyFactory.enumerate();
@@ -88,6 +96,24 @@ public class MonitorWindow extends javax.swing.JFrame {
         return j != null;
     }
 
+    public void close() {
+        if(j != null) {
+            j.setCallback(null);
+            j.setCloseCallback(null);
+            j.close();
+            j = null;
+            c.repaint();
+        }
+
+        btnClose.setEnabled(false);
+    }
+
+    public void closeCallback() {
+        btnClose.setEnabled(false);
+        j = null;
+        c.repaint();
+    }
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -115,6 +141,7 @@ public class MonitorWindow extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         txtStreamOutput = new javax.swing.JTextArea();
         cmbStreamFilter = new javax.swing.JComboBox();
+        btnEnumerate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("JoyMonitor");
@@ -215,7 +242,7 @@ public class MonitorWindow extends javax.swing.JFrame {
         txtStreamOutput.setBackground(new java.awt.Color(-16777216,true));
         txtStreamOutput.setColumns(20);
         txtStreamOutput.setEditable(false);
-        txtStreamOutput.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        txtStreamOutput.setFont(new java.awt.Font("Monospaced", 0, 12));
         txtStreamOutput.setForeground(new java.awt.Color(-16711936,true));
         txtStreamOutput.setRows(5);
         jScrollPane1.setViewportView(txtStreamOutput);
@@ -253,6 +280,13 @@ public class MonitorWindow extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Event Stream", jPanel1);
 
+        btnEnumerate.setText("Enumerate");
+        btnEnumerate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnumerateActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -269,7 +303,9 @@ public class MonitorWindow extends javax.swing.JFrame {
                         .addComponent(btnOpen))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnClose)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 443, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEnumerate)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 326, Short.MAX_VALUE)
                         .addComponent(btnExit)))
                 .addContainerGap())
         );
@@ -287,7 +323,8 @@ public class MonitorWindow extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnExit)
-                    .addComponent(btnClose))
+                    .addComponent(btnClose)
+                    .addComponent(btnEnumerate))
                 .addContainerGap())
         );
 
@@ -298,7 +335,6 @@ public class MonitorWindow extends javax.swing.JFrame {
         if(!noJoysticks) {
             if(j != null) {
                 j.setCallback(null);
-                j.stopPollingThread();
                 j.close();
             }
             j = JoyFactory.get(cmbDevices.getSelectedIndex());
@@ -306,6 +342,7 @@ public class MonitorWindow extends javax.swing.JFrame {
             c.setTotalAxes(j.getNumAxes());
             c.setTotalButtons(j.getNumButtons());
             j.setCallback(new JoyEventCallback(this, c));
+            j.setCloseCallback(new JoyEventCallback(this, c));
             j.startPollingThread(5);            
             btnClose.setEnabled(true);
 			c.repaint();
@@ -315,22 +352,13 @@ public class MonitorWindow extends javax.swing.JFrame {
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         if(j != null) {
             j.setCallback(null);
-            j.stopPollingThread();
             j.close();
         }
         System.exit(0);
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        if(j != null) {
-            j.setCallback(null);
-            j.stopPollingThread();
-            j.close();
-            j = null;
-            c.repaint();
-        }
-
-        btnClose.setEnabled(false);
+        close();
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnSetNativePropertyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetNativePropertyActionPerformed
@@ -351,6 +379,11 @@ public class MonitorWindow extends javax.swing.JFrame {
         txtStreamOutput.setText("");
     }//GEN-LAST:event_btnClearStreamOutputActionPerformed
 
+    private void btnEnumerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnumerateActionPerformed
+        enumerate();
+        c.repaint();
+    }//GEN-LAST:event_btnEnumerateActionPerformed
+
     public void appendStreamOutput(LinuxJoystickEvent ev) {
         if(tglStreamMonitor.isSelected()) {
             if(cmbStreamFilter.getSelectedIndex() == 0 ||
@@ -365,6 +398,7 @@ public class MonitorWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClearStreamOutput;
     private javax.swing.JButton btnClose;
+    private javax.swing.JButton btnEnumerate;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnOpen;
     private javax.swing.JButton btnSetNativeProperty;

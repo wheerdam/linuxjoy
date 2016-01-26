@@ -52,8 +52,7 @@ An alternative to using the callback handler is to write your own polling thread
 
 To close the device, call the following functions:
 ```java
-j.stopPollingThread(); // if being used
-j.close();
+j.close(); // will also stop the polling thread
 ```
 
 Any blocking `poll()` will be interrupted when `close()` is called.
