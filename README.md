@@ -112,7 +112,9 @@ int joyInfo[] = NoJoy.getEnumeration()
 // find the joystick you would like to use by iterating through joyInfo
 
 LinuxJoystick j = new NoJoy(index);
-j.setButtonsAxes(JoyFactory.BUTTONS(joyInfo[index]), JoyFactory.AXES(joyInfo[index])); // need to set buttons and axes
+j.setButtonsAxes(   // need to set buttons and axes
+		JoyFactory.BUTTONS(joyInfo[index]), JoyFactory.AXES(joyInfo[index])
+	);
 ```
 
 `NoJoy` is a subclass of `LinuxJoystick` that uses the native library functions to read the device data instead of the `FileChannel` implementation that the superclass uses in Linux.
