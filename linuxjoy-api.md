@@ -91,7 +91,7 @@ public LinuxJoystickSubclass(int identifier, int buttons, int axes) {
 
 The subclass then can override the `channelOpen()` function to actually open the data source identified by `path`. `channelOpen()` will need to return True if the data source is successfully opened and False otherwise. Returning False from `channelOpen()` will cause the `deviceOpen` member to be set as false, signifying to the rest of the class that this joystick reference is not open.
 
-`buf` is an 8KB buffer that is used by `LinuxJoystick` to process the event data. The subclass will need to fill this buffer by overriding the `channelRead()` function. `channelRead()` also needs to return the number of bytes that were read. The subclass can call a `close()` from `channelRead()` if it determines that the device has been closed / becomes unavailable while reading.
+`buf` is an 8KB buffer that is used by `LinuxJoystick` to process the event data. The subclass will need to fill this buffer by overriding the `channelRead()` function. `channelRead()` also needs to return the number of bytes that were read. The subclass can call a `close()` from `channelRead()` if it determines that the device has been closed / becomes unavailable while reading. The subclass' implementation of `channelRead()` **must** follow the Linux Joystick API packets when filling this buffer (it's why the library is called LinuxJoystick after all). Please mind the machine's endianness when serializing the data. Check for `LinuxJoystickEvent.ENDIANNESS` to figure out what endian the rest of the framework will use when decoding the data.
 
 Finally, the subclass will need to override `channelClose()` to clean up resources when the user determines that the input device is no longer needed.
 
