@@ -20,6 +20,8 @@ package org.bbi.linuxjoy;
 
 import org.bbi.linuxjoy.hacks.DummyInterruptibleChannel;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * NoJoy is a native implementation interface for LinuxJoystick. This
@@ -54,6 +56,7 @@ public class NoJoy extends LinuxJoystick {
 	public static native String getVersionString();
 	
 	private static boolean LINK_SATISFIED;
+	private static String linkErrorStackTrace;
 	
 	private static final int MAX_BUTTONS = 64;
 	private static final int MAX_AXES = 64;
@@ -62,10 +65,14 @@ public class NoJoy extends LinuxJoystick {
 		try {
 			System.loadLibrary("njnative");
 			LINK_SATISFIED = true;
+			linkErrorStackTrace = "No error";
 		} catch(UnsatisfiedLinkError e) {
 			System.err.println("NoJoy: unable to link with njnative library. " +
 				"Native device functionality will be unavailable.");
 			LINK_SATISFIED = false;
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			linkErrorStackTrace = sw.toString();	
 		}
 	}
 
@@ -93,6 +100,15 @@ public class NoJoy extends LinuxJoystick {
 		}
 	
 		return enumerate();
+	}
+
+	/**
+	 * Get the stack trace of the link error if it has occured.
+	 *
+	 * @return Stack trace for the link error as string
+	 */
+	public static String getLinkErrorString() {
+		return linkErrorStackTrace;
 	}
 
 	@Override
