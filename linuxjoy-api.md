@@ -1,6 +1,6 @@
 # LinuxJoystick API Documentation
 
-This document describes the LinuxJoystick Library API. The description includes the `LinuxJoystick` class, support classes, extensions to support multiple platforms and use-cases, and description of the framework that enables these extensions.
+This document describes the LinuxJoystick Library API. The description includes the `LinuxJoystick` and `JoyFactory` classes.
 
 ## The LinuxJoystick Class
 
