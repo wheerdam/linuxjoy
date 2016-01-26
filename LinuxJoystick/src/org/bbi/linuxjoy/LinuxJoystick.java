@@ -52,10 +52,17 @@ public class LinuxJoystick {
 	 */
 	protected ByteBuffer buf = ByteBuffer.allocate(8192);
 
+	/**
+	 * A flag that signifies whether the device is still open and ready for reading.
+	 * Any part of the program that determines that the device is stale should set
+	 * this flag to false.
+	 */
+	protected boolean deviceOpen;
+	
 	private byte[] ibuf = new byte[8];
 	private int ibuf_index = 0;
 	private int nread, n;
-	
+		
 	private boolean stateChanged;
 
 	private boolean[] buttonStates;
@@ -76,6 +83,7 @@ public class LinuxJoystick {
 	 */
 	public LinuxJoystick(String path, int buttons, int axes) {
 		int i;
+		deviceOpen = false;
 		open(path, buttons, axes);
 		stateChanged = false;
 		threadSleepMs = 5;
@@ -99,7 +107,7 @@ public class LinuxJoystick {
 		if(pt != null) {
 			System.out.println(this + ": polling thread is already running");
 		} else {
-			if(fc == null) {
+			if(!deviceOpen) {
 				reset();
 			}
 			threadSleepMs = sleepMs;
@@ -127,17 +135,17 @@ public class LinuxJoystick {
 	 * @param axes Number of axes that the controller has
 	 */
 	public final void open(String path, int buttons, int axes) {
-		if(fc != null) {
+		if(deviceOpen) {
 			close();
 		}
 
-	this.path = path;
+		this.path = path;
 		buttonStates = new boolean[buttons];
 		axisStates = new int[axes];
 		nread = 0;
 		n = 0;
 
-		channelOpen();
+		deviceOpen = channelOpen();
 	}
 
 	/**
@@ -146,7 +154,7 @@ public class LinuxJoystick {
 	 * @return True if a channel is currently open, false otherwise
 	 */
 	public boolean isDeviceOpen() {
-		return fc != null;
+		return deviceOpen;
 	}
 
 	/**
@@ -167,6 +175,7 @@ public class LinuxJoystick {
 		}
 
 		channelClose();
+		deviceOpen = false;
 
 		if(closeCallback != null) {
 			closeCallback.callback(this, null);
@@ -178,7 +187,7 @@ public class LinuxJoystick {
 	 * the channel and interrupt the read
 	 */
 	private void read() {
-		if(fc == null) {
+		if(!deviceOpen) {
 			System.err.println("ljs: input file is not open");
 			return;
 		}
@@ -244,15 +253,19 @@ public class LinuxJoystick {
 	/**
 	 * The channel open routine. By default, the channel is implemented as a
 	 * FileChannel. Override this function if other data input type is needed.
+	 *
+	 * @return True if open is successful, false otherwise
 	 */
-	protected void channelOpen() {
+	protected boolean channelOpen() {
 		try {
-		RandomAccessFile f = new RandomAccessFile(path, "r");
+			RandomAccessFile f = new RandomAccessFile(path, "r");
 			this.fc = f.getChannel();
 			System.out.println(this + ": initialized");
+			return true;
 		} catch(FileNotFoundException fnfe) {
 			System.err.println(this + ": file not found: " + path);
 			fc = null;
+			return false;
 		}
 	}
 
@@ -382,7 +395,7 @@ public class LinuxJoystick {
 
 	@Override
 	public String toString() {
-		return "LinuxJoystick" + (fc != null ? "(" + path + ")" : "");
+		return "LinuxJoystick" + (deviceOpen ? "(" + path + ")" : "");
 	}
 
 	class PollingThread extends Thread {
@@ -390,13 +403,13 @@ public class LinuxJoystick {
 
 		@Override
 		public void run() {
-			if(fc == null)
+			if(!deviceOpen)
 				return;
 
 			//System.out.println("ljs(" + path + "): polling thread is running");
 
 			while(!stop) {
-				if(fc == null) {
+				if(!deviceOpen) {
 					stop = true;
 				}
 

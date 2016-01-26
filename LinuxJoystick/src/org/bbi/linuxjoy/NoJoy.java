@@ -44,7 +44,7 @@ public class NoJoy extends LinuxJoystick {
 	 *
 	 * @param index Library-defined index
 	 * @param key Library-defined property key
-	 * @param value Library-defined property value
+	 * @param val Library-defined property value
 	 * @return the native function may return a byte array
 	 */
 	public static native byte[] setNativeProperty(int index, int key, int val);
@@ -113,14 +113,14 @@ public class NoJoy extends LinuxJoystick {
 	}
 
 	@Override
-	protected void channelOpen() {
+	protected boolean channelOpen() {
 		deviceIndex = Integer.parseInt(path);
 	
 		if(LINK_SATISFIED && openNativeDevice(deviceIndex)) {
-			fc = new DummyInterruptibleChannel();
+			return true;
 		} else {
 			System.err.println(this + ": native device unavailable");
-			fc = null;
+			return false;
 		}
 	}
 
@@ -132,7 +132,7 @@ public class NoJoy extends LinuxJoystick {
 			buf.put(data);			// and just dump it to our buffer
 			return data.length;
 		} else {
-			fc = null;
+			close();
 			return 0;
 		}
 	}

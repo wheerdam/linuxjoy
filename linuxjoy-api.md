@@ -1,6 +1,6 @@
 # LinuxJoystick API Documentation
 
-This document describes the LinuxJoystick Library API. The description includes the `LinuxJoystick` and `JoyFactory` classes.
+This document describes the LinuxJoystick Library API. The description includes the `LinuxJoystick` and `JoyFactory` classes and documentation on how to extend `LinuxJoystick` to support more than the Linux Joystick API.
 
 ## The LinuxJoystick Class
 
@@ -63,3 +63,35 @@ Use the `JoyFactory.get(int index)` function to get a `LinuxJoystick` reference 
 **Note:** `JoyFactory` currently does not support device identifier look-up in Linux and will always return a generic ID. The buttons and axes will be correctly reported.
 
 `JoyFactory` has the `getFirstUsableDevice()` function that will enumerate (if it has not been done already) and return a `LinuxJoystick` object of the first controller that has a valid ID to the caller. This function is useful if all the user wants to do is just attempt to get a controller that is connected to the computer and go from there. The function will return `null` if there is no device that can be used.
+
+## Extending LinuxJoystick
+
+The `LinuxJoystick` class uses `FileChannel` to open and read the Linux joystick device. Few functions of the `LinuxJoystick` class can be overridden by a subclass so a different data source can be used to supply joystick data to the user program. The following are the `LinuxJoystick` class members that will be inherited and overridden that are crucial in the subclass:
+
+```java
+protected AbstractInterruptibleChannel fc;
+protected String path;
+protected ByteBuffer buf = ByteBuffer.allocate(8192);
+protected boolean deviceOpen;
+
+public boolean channelOpen() { ... }
+public int channelRead() { ... }
+public void channelClose() { ... }
+```
+
+`fc` is the channel object that is used by `LinuxJoystick` to open and read the Linux joystick device. If the user subclass does not use channels, this member can be ignored completely. This object is only used in the overridable `channelOpen()`, `channelRead()`, and `channelClose()` functions in `LinuxJoystick`.
+
+The `path` member is the resource identifier (path to device file for `LinuxJoystick`). In some cases the subclass only needs a numerical identifier. If this is the case, the identifier will still need to be stored as a `String` and only casted to an integer when it is actually being used. `LinuxJoystick` does not have an empty constructor, so a `super` must be passed on in the subclass' constructor, e.g.:
+
+```java
+public LinuxJoystickSubclass(int identifier, int buttons, int axes) {
+	super(String.valueOf(identifier), buttons, axes);
+}
+```
+
+The subclass then can override the `channelOpen()` function to actually open the data source identified by `path`. `channelOpen()` will need to return True if the data source is successfully opened and False otherwise. Returning False from `channelOpen()` will cause the `deviceOpen` member to be set as false, signifying to the rest of the class that this joystick reference is not open.
+
+`buf` is an 8KB buffer that is used by `LinuxJoystick` to process the event data. The subclass will need to fill this buffer by overriding the `channelRead()` function. `channelRead()` also needs to return the number of bytes that were read. The subclass can call a `close()` from `channelRead()` if it determines that the device has been closed / becomes unavailable while reading.
+
+Finally, the subclass will need to override `channelClose()` to clean up resources when the user determines that the input device is no longer needed.
+
