@@ -31,7 +31,7 @@ Two functions `getAxisState(int index)` and `getButtonState(int index)` can be u
 
 In the callback function, the user can either use the provided reference to the `LinuxJoystick` instance to inspect the controller states, or the user can use the event reference itself to determine what has occured. The `LinuxJoystickEvent` class has three useful functions that can be used to determine a state change: `isAxisChanged()`, `isButtonDown()`, and `isButtonUp()`. Each of the function will return the index of the axis or the button that the event corresponds to. The functions will return `-1` if it is not the correct event. The README document for the library has an example code that takes advantage of this interface.
 
-`LinuxJoystick` also has a `setCloseCallback(LinuxJoystickEventCallback)` function that sets a callback that gets called when the `close()` function is called. The event field of the `callback(LinuxJoystick j, LinuxJoystickEvent ev)` function will be `null` when the callback is performed. *Do not call `close()` within this callback as this will cause a circular call that will overflow the call stack and crash the program*.
+`LinuxJoystick` also has a `setCloseCallback(LinuxJoystickEventCallback)` function that sets a callback that gets called when the `close()` function is called. The event field of the `callback(LinuxJoystick j, LinuxJoystickEvent ev)` function will be `null` when the callback is performed. **Do not call `close()` within this callback** as this will cause a circular call that will overflow the call stack and crash the program.
 
 ### Linux Joystick API Event Data Structure
 
@@ -58,4 +58,4 @@ The `enumerate()` class will attempt to open all detected Joystick devices in or
 | 0   | Generic                           |
 | 1   | Xbox 360 Controller               |
 
-*Note:* `JoyFactory` currently does not support device identifier look-up in Linux and will always return a generic ID. The buttons and axes will be correctly reported.
+**Note:** `JoyFactory` currently does not support device identifier look-up in Linux and will always return a generic ID. The buttons and axes will be correctly reported.
