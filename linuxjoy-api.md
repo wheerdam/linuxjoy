@@ -51,11 +51,15 @@ The `enumerate()` class will attempt to open all detected Joystick devices in or
 |:---:|:--------------:|:-----------------:|:----:|
 |  -  | Number of Axes | Number of Buttons |  ID  |
 
-`enumerate()` will fill a -1 (0xFFFFFFFF) for an entry if it can not find any information about the device. The user then can proceed to check for the ID to see if the controller is supported. The functions `JoyFactory.BUTTONS(int)` and `JoyFactory.AXES(int)` can be used to isolate the number of buttons and axes. The following is the IDs currently supported by `JoyFactory`:
+`enumerate()` will fill a -1 (0xFFFFFFFF) for an entry if it can not find any information about the device. The user then can proceed to check for the ID to see if the controller is supported. The functions `JoyFactory.BUTTONS(int)` and `JoyFactory.AXES(int)` can be used to isolate the number of buttons and axes. The following are the IDs currently supported by `JoyFactory`:
 
 | ID  | Name                              |
 |:---:|-----------------------------------|
 | 0   | Generic                           |
 | 1   | Xbox 360 Controller               |
 
+Use the `JoyFactory.get(int index)` function to get a `LinuxJoystick` reference of the desired controller.
+
 **Note:** `JoyFactory` currently does not support device identifier look-up in Linux and will always return a generic ID. The buttons and axes will be correctly reported.
+
+`JoyFactory` has the `getFirstUsableDevice()` function that will enumerate (if it has not been done yet) and return a `LinuxJoystick` object of the first controller that has a valid ID to the caller. This function is useful if all the user want to do is just attempt to get a controller that is connected to the computer and go from there. The function will return `null` if there is no device that can be used.
