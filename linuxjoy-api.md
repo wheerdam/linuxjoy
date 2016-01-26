@@ -4,7 +4,7 @@ This document describes the LinuxJoystick Library API. The description includes 
 
 ## The LinuxJoystick Class
 
-`LinuxJoystick` is a Java class that can be used to interface with a Joystick device in Linux. The constructor for the class takes the path to the Joystick device file and the number of buttons and axes that the controller has. The following is a list of `LinuxJoystick` functions:
+`LinuxJoystick` is a Java class that can be used to interface with a Joystick device in Linux. The constructor for the class takes the path to the Joystick device file and the number of buttons and axes that the controller has. The following is a list of `LinuxJoystick` public functions that are to be used by user programs:
 
 ```java
 public void poll()
