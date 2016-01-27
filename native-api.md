@@ -48,21 +48,3 @@ javah -cp LinuxJoystick.jar org.bbi.linux.NoJoy
 ```
 
 The native library must be compiled as shared library `njnative.dll` in Windows or `libnjnative.so` in *nixes and be placed in the runtime classpath so LinuxJoystick can find and link with it.
-
-## Windows XInput Native Library
-
-A Windows [XInput](https://msdn.microsoft.com/en-us/library/windows/desktop/hh405053(v=vs.85).aspx) native library that implements the native API is included in LinuxJoystick. The source code of the native library is named [`winxinput.cpp`](LinuxJoystick/native/winxinput.cpp). This library can be compiled in Visual Studio 2015 with the provided solution file in `LinuxJoystick/native/njnative` and will generate `njnative.dll`.
-
-**Note:** The architecture of the native library must match with the JVM architecture. E.g. a 32-bit native library will not be able to link with LinuxJoystick running on a 64-bit JVM, and vice versa. `NoJoy` keeps a stack trace if a link failure has occured. This stack trace can be accessed with the `NoJoy.getLinkErrorString()` function.
-
-The native library will read the device status with XInput's `XInputGetState` function when its `nativePoll(int index)` function is called. It will then construct and return Linux Joystick API packets if there is a change in the state of the specified controller. The LinuxJoystick framework will decode these packets, update the joystick object state, and generate callback events.
-
-### Miscellaneous
-
-The NoJoy Windows XInput library has a few properties that can be useful:
-
-- Key=0 - set dead zone value (0 to 32767) for the specified controller in the index value
-- Key=1 - set vibration setting for the specified controller. High 16-bit of value field is LEFT motor, and the lower 16-bit controls the RIGHT motor
-- Key=2 - return version array (4 bytes)
- 
-`getVersionString()` will return "NoJoy Windows XInput (njnative.dll) v1.00" with possible different version number.
