@@ -6,6 +6,7 @@ This document describes the LinuxJoystick Library API. The description includes 
 
 `LinuxJoystick` is a Java class that can be used to interface with a Joystick device in Linux. The constructor for the class takes the path to the Joystick device file and the number of buttons and axes that the controller has. The following is a list of `LinuxJoystick` public functions that are to be used by user programs:
 
+
 ```java
 public void poll()
 public void open(String path, int buttons, int axes)
@@ -27,6 +28,7 @@ public void stopPollingThread()
 ```
 
 The following is an example initialization of the class:
+
 
 ```java
 // get a controller with 11 buttons and 8 axes on /dev/input/js0 
@@ -90,6 +92,7 @@ Use the `JoyFactory.get(int index)` function to get a `LinuxJoystick` reference 
 
 The `LinuxJoystick` class uses `FileChannel` to open and read the Linux joystick device. Few functions of the `LinuxJoystick` class can be overridden by a subclass so a different data source can be used to supply joystick data to the user program. The following are the `LinuxJoystick` class members that will be inherited and overridden that are crucial in the subclass:
 
+
 ```java
 protected AbstractInterruptibleChannel fc;
 protected String path;
@@ -106,6 +109,7 @@ public void channelClose() { ... }
 `fc` is the channel object that is used by `LinuxJoystick` to open and read the Linux joystick device. If the user subclass does not use channels, this member can be ignored completely. 
 
 The `path` member is the resource identifier (e.g. path to device file for `LinuxJoystick`). In some cases the subclass only needs a numerical identifier. If this is the case, the identifier will still need to be stored as a `String` and only casted to an integer when it is actually being used. `LinuxJoystick` does not have an empty constructor, so a `super` must be passed on in the subclass' constructor, e.g.:
+
 
 ```java
 public LinuxJoystickSubclass(int identifier, int buttons, int axes) {
