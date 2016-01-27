@@ -41,7 +41,7 @@ The native functions should be self-explanatory. Function contracts:
 - `enumerate()` must return an array of integer with each element describing the enumerated device as described in the [linuxjoy-api](linuxjoy-api.md) document
 - The framework will use the array indexing that the native library returned with `enumerate()` to identify which device is being used. Make sure the numbering is internally consistent in the native library
 - `nativePoll()` must return serialized [Linux Joystick API](https://www.kernel.org/doc/Documentation/input/joystick-api.txt) packets (4-byte timestamp, 2-byte value, 1-byte type, and 1-byte number)
-- `nativePoll()` must not block, and may return an empty array if there is no data
+- `nativePoll()` must not block, and may return an empty array if there is no data. The function may **not** return a null pointer
 - `nativePoll()` may return torn 8-byte data as long as it can complete it in subsequent polls
 - `openNativeDevice(int index)`, `isNativeDeviceOpen(int index)`, and `closeNativeDevice(int index)` must return the correct device status
 
