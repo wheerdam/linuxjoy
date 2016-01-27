@@ -88,6 +88,10 @@ Use the `JoyFactory.get(int index)` function to get a `LinuxJoystick` reference 
 
 `JoyFactory` has the `getFirstUsableDevice()` function that will enumerate (if it has not been done already) and return a `LinuxJoystick` object of the first controller that has a valid ID to the caller. This function is useful if all the user wants to do is just attempt to get a controller that is connected to the computer and go from there. The function will return `null` if there is no device that can be used.
 
+### ALWAYS_USE_NATIVE
+
+`JoyFactory` can be forced to always try to use the native library by setting the `JoyFactory.ALWAYS_USE_NATIVE` field to `true`.
+
 ## Extending LinuxJoystick
 
 The `LinuxJoystick` class uses `FileChannel` to open and read the Linux joystick device. Few functions of the `LinuxJoystick` class can be overridden by a subclass so a different data source can be used to supply joystick data to the user program. The following are the `LinuxJoystick` class members that will be inherited and overridden that are crucial in the subclass:

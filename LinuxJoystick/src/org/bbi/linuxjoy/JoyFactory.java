@@ -33,6 +33,8 @@ public class JoyFactory {
 	public static final int NOT_OPEN = -1;
 	public static final int GENERIC = 0x00;
 	public static final int XINPUT = 0x01;
+	
+	public static boolean ALWAYS_USE_NATIVE = false;
 
 	/**
 	 * Enumerate all the joystick devices on the platform and instantiate
@@ -40,7 +42,7 @@ public class JoyFactory {
 	 *
 	 * @return An array of information integer with the following format:<br />
 	 * ByteOffset_Value <br />
-	 * 3:________ nothing <br />
+	 * 3_________ nothing <br />
 	 * 2_________ Number of axes <br />
 	 * 1_________ Number of buttons <br />
 	 * 0_________ Some sort of identification as defined by the constants
@@ -49,7 +51,7 @@ public class JoyFactory {
 		int joyInfo[] = null;
 		int i;
 
-		if(System.getProperty("os.name").toLowerCase().equals("linux")) {
+		if(!ALWAYS_USE_NATIVE && System.getProperty("os.name").toLowerCase().equals("linux")) {
 			String jf[];
 
 			// if it's linux, we look at /dev/input/js*
