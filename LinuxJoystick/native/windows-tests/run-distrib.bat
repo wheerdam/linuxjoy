@@ -1,1 +1,1 @@
-java -cp ..\..\dev-distrib\LinuxJoystick.jar;. -Djava.library.path=..\..\dev-distrib %1 %2 %3 %4
+java -cp ..\..\..\dev-distrib\LinuxJoystick.jar;. -Djava.library.path=..\..\..\dev-distrib %1 %2 %3 %4

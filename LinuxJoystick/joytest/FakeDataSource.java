@@ -1,5 +1,4 @@
 import org.bbi.linuxjoy.*;
-import org.bbi.linuxjoy.hacks.*;
 import java.io.*;
 import java.nio.*;
 import java.nio.channels.*;
@@ -11,12 +10,8 @@ class FakeDataSource extends LinuxJoystick {
 	}	
 
 	@Override
-	protected void channelOpen() {
-		try {
-			fc = new DummyInterruptibleChannel(); // we don't care, as long as it's non null
-		} catch(Exception e) {
-			fc = null; // fail
-		}
+	protected boolean channelOpen() {
+		return true;
 	}
 
 	@Override

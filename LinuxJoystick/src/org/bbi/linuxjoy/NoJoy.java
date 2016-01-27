@@ -18,7 +18,6 @@
 
 package org.bbi.linuxjoy;
 
-import org.bbi.linuxjoy.hacks.DummyInterruptibleChannel;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -139,22 +138,13 @@ public class NoJoy extends LinuxJoystick {
 
 	@Override
 	public void channelClose() {
-		try {
-			if(fc != null) {
-				fc.close();
+		if(LINK_SATISFIED) {
+			if(!closeNativeDevice(deviceIndex)) {
+				System.err.println(this + ": native device close error");
+			} else {
+				System.out.println(this + ": native device closed");
 			}
-			if(LINK_SATISFIED) {
-				if(!closeNativeDevice(deviceIndex)) {
-					System.err.println(this + ": native device close error");
-				} else {
-					System.out.println(this + ": native device closed");
-				}
-			}
-		} catch(IOException ioe) {
-			System.err.println(this + ": close I/O exception: " + ioe.getMessage());
 		}
-
-		fc = null;
 	}
 
 	@Override
