@@ -12,6 +12,7 @@ public NoJoy(int index)
 
 // Public Java functions
 public int[] getEnumeration()
+public String getLinkErrorString() // contains stack trace if linking failed
 
 // Native functions, accessed by public wrapper functions if private
 public native String getVersionString()
