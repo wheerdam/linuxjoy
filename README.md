@@ -64,6 +64,8 @@ j.close(); // will also stop the polling thread
 
 Any blocking `poll()` will be interrupted when `close()` is called.
 
+Check out [linuxjoy-api](linuxjoy-api.md) for more detailed information about LinuxJoystick API.
+
 ## Building the Library
 
 You will need a JDK and `ant` to build the library. If they're configured properly, you can just go into the LinuxJoystick directory and run `ant jar`. The compiled library will be in the `LinuxJoystick/dist` directory. You can package LinuxJoystick with your own program however you see fit. You just have to make sure that `LinuxJoystick.jar` or its contents are in your classpath when compiling and running your program.
@@ -95,6 +97,8 @@ LinuxJoystick has a native library interface and a Windows implementation to acc
 Note: the `poll()` function of the native library is non-blocking and will return immediately. As long as your Java program uses the polling thread, this should be a minor issue other than an increase in CPU usage.
 
 The native library development files are in the `LinuxJoystick/native` directory. `org_bbi_linuxjoy_NoJoy.h` is the header that has the JNI function signatures of the Java native functions. `winxinput.cpp` is the C++ source that implements this interface and uses Windows XInput API to access the game controllers. A Visual Studio 2015 solution is provided in `LinuxJoystick/native/njnative` to build the `njnative.dll` Windows library.
+
+See [native-api](native-api.md) for more information about the LinuxJoystick native API.
 
 ### Running LinuxJoystick with Native Library
 
