@@ -49,6 +49,6 @@ javah -cp LinuxJoystick.jar org.bbi.linux.NoJoy
 
 The native library must be compiled as shared library `njnative.dll` in Windows or `libnjnative.so` in *nixes and be placed in the runtime classpath so LinuxJoystick can find and link with it.
 
-## Known NoJoy Implementations
+## NoJoy Implementations
 
 - [Windows NoJoy native library](windows.md) that uses XInput to interface with Xbox controllers.
