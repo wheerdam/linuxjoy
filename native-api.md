@@ -42,4 +42,12 @@ The native functions should be self-explanatory. Function contracts:
 - `nativePoll()` must return serialized [Linux Joystick API](https://www.kernel.org/doc/Documentation/input/joystick-api.txt) packets (4-byte timestamp, 2-byte value, 1-byte type, and 1-byte number)
 - `nativePoll()` must not block, and may return an empty array if there is no data
 - `nativePoll()` may return torn 8-byte data as long as it can complete it in subsequent polls
-- `openNativeDevice(int index)` and `closeNativeDevice(int index)` must return the correct device status
+- `openNativeDevice(int index)`, `isNativeDeviceOpen(int index)`, and `closeNativeDevice(int index)` must return the correct device status
+
+## Windows XInput Native Library
+
+A Windows [XInput](https://msdn.microsoft.com/en-us/library/windows/desktop/hh405053(v=vs.85).aspx) native library that implements the native API is included in LinuxJoystick. The source code of the native library is named [`winxinput.cpp`](LinuxJoystick/native/winxinput.cpp). This library can be compiled in Visual Studio 2015 with the provided solution file in `LinuxJoystick/native/njnative` and will generate `njnative.dll`.
+
+**Note:** The architecture of the native library must match with the JVM architecture. E.g. a 32-bit native library will be able to link with LinuxJoystick running on a 64-bit JVM, and vice versa. `NoJoy` keeps a stack trace if a link failure has occured. This stack trace can be accessed with the `NoJoy.getLinkErrorString()` function.
+
+The native library will read the device status with XInput's `XInputGetState` function when its `nativePoll(int index)` function is called. It will then construct and return Linux Joystick API packets if there is a change in the state of the specified controller. The LinuxJoystick framework will decode these packets, update the joystick object state, and generate callback events.
