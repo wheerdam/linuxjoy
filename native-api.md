@@ -44,7 +44,7 @@ The native functions should be self-explanatory. Function contracts:
 - `nativePoll()` may return up to 8KB worth of data
 - `nativePoll()` must not block, and may return an empty array if there is no data. The function may **not** return a null pointer
 - `nativePoll()` may return torn 8-byte data as long as it can complete it in subsequent polls
-- `openNativeDevice(int index)`, `isNativeDeviceOpen(int index)`, and `closeNativeDevice(int index)` must return the correct device status
+- `openNativeDevice(int index)` and `isNativeDeviceOpen(int index)` must return the correct device status
 
 ## Windows XInput Native Library
 
