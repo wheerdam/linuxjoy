@@ -41,8 +41,8 @@ static WORD hardDeadZone = 6000;
 
 static const char version[] = "NoJoy Windows XInput (njnative.dll) v1.00";
 
-// populate our buffer with the latest joystick event
-void populate(jbyte *buf, jint offset, jint time, jshort val, jbyte type, jbyte num) {
+// fill our buffer with the latest joystick event
+void nj_put(jbyte *buf, jint offset, jint time, jshort val, jbyte type, jbyte num) {
 	// This is the Linux joystick API data structure as described in:
 	//		Documentation/input/joystick-api.txt 
 	// in the kernel source directory. We assume little endian (x86 machine)
@@ -87,43 +87,43 @@ JNIEXPORT jbyteArray JNICALL Java_org_bbi_linuxjoy_NoJoy_nativePoll
 		
 		if (currButtons != prevButtons) {
 			if ((currButtons & XINPUT_GAMEPAD_A) != (prevButtons & XINPUT_GAMEPAD_A)) {
-				populate(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_A) >> 12, 1, 0);
+				nj_put(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_A) >> 12, 1, 0);
 				eventCount++;
 			}
 			if ((currButtons & XINPUT_GAMEPAD_B) != (prevButtons & XINPUT_GAMEPAD_B)) {
-				populate(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_B) >> 13, 1, 1);
+				nj_put(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_B) >> 13, 1, 1);
 				eventCount++;
 			}
 			if ((currButtons & XINPUT_GAMEPAD_X) != (prevButtons & XINPUT_GAMEPAD_X)) {
-				populate(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_X) >> 14, 1, 2);
+				nj_put(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_X) >> 14, 1, 2);
 				eventCount++;
 			}
 			if ((currButtons & XINPUT_GAMEPAD_Y) != (prevButtons & XINPUT_GAMEPAD_Y)) {
-				populate(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_Y) >> 15, 1, 3);
+				nj_put(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_Y) >> 15, 1, 3);
 				eventCount++;
 			}
 			if ((currButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) != (prevButtons & XINPUT_GAMEPAD_LEFT_SHOULDER)) {
-				populate(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) >> 8, 1, 4);
+				nj_put(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) >> 8, 1, 4);
 				eventCount++;
 			}
 			if ((currButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) != (prevButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
-				populate(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) >> 9, 1, 5);
+				nj_put(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) >> 9, 1, 5);
 				eventCount++;
 			}
 			if ((currButtons & XINPUT_GAMEPAD_BACK) != (prevButtons & XINPUT_GAMEPAD_BACK)) {
-				populate(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_BACK) >> 5, 1, 6);
+				nj_put(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_BACK) >> 5, 1, 6);
 				eventCount++;
 			}
 			if ((currButtons & XINPUT_GAMEPAD_START) != (prevButtons & XINPUT_GAMEPAD_START)) {
-				populate(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_START) >> 4, 1, 7);
+				nj_put(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_START) >> 4, 1, 7);
 				eventCount++;
 			}
 			if ((currButtons & XINPUT_GAMEPAD_LEFT_THUMB) != (prevButtons & XINPUT_GAMEPAD_LEFT_THUMB)) {
-				populate(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_LEFT_THUMB) >> 6, 1, 9);
+				nj_put(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_LEFT_THUMB) >> 6, 1, 9);
 				eventCount++;
 			}
 			if ((currButtons & XINPUT_GAMEPAD_RIGHT_THUMB) != (prevButtons & XINPUT_GAMEPAD_RIGHT_THUMB)) {
-				populate(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_RIGHT_THUMB) >> 7, 1, 10);
+				nj_put(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_RIGHT_THUMB) >> 7, 1, 10);
 				eventCount++;
 			}
 		}
@@ -139,7 +139,7 @@ JNIEXPORT jbyteArray JNICALL Java_org_bbi_linuxjoy_NoJoy_nativePoll
 			else {
 				tempVal = -32767;
 			}
-			populate(buf, eventCount * 8, time, tempVal, 2, 2);
+			nj_put(buf, eventCount * 8, time, tempVal, 2, 2);
 			eventCount++;
 		}
 
@@ -152,7 +152,7 @@ JNIEXPORT jbyteArray JNICALL Java_org_bbi_linuxjoy_NoJoy_nativePoll
 			else {
 				tempVal = -32767;
 			}
-			populate(buf, eventCount * 8, time, tempVal, 2, 5);
+			nj_put(buf, eventCount * 8, time, tempVal, 2, 5);
 			eventCount++;
 		}
 		
@@ -165,11 +165,11 @@ JNIEXPORT jbyteArray JNICALL Java_org_bbi_linuxjoy_NoJoy_nativePoll
 			}
 			if (dz_check(prevVal) && !dz_check(tempVal)) {
 				tempVal = 0;
-				populate(buf, eventCount * 8, time, tempVal, 2, 0);
+				nj_put(buf, eventCount * 8, time, tempVal, 2, 0);
 				eventCount++;
 			}
 			else if (dz_check(tempVal)) {			
-				populate(buf, eventCount * 8, time, tempVal, 2, 0);
+				nj_put(buf, eventCount * 8, time, tempVal, 2, 0);
 				eventCount++;
 			}
 		}
@@ -183,14 +183,14 @@ JNIEXPORT jbyteArray JNICALL Java_org_bbi_linuxjoy_NoJoy_nativePoll
 			tempVal ^= 0xffff; // flip to match LinuxJoystick API
 			if (dz_check(prevVal) && !dz_check(tempVal)) {
 				tempVal = 0;
-				populate(buf, eventCount * 8, time, tempVal, 2, 1);
+				nj_put(buf, eventCount * 8, time, tempVal, 2, 1);
 				eventCount++;
 			}
 			else if (dz_check(tempVal)) {
 				if (tempVal == -32768) {
 					tempVal = -32767;
 				}
-				populate(buf, eventCount * 8, time, tempVal, 2, 1);
+				nj_put(buf, eventCount * 8, time, tempVal, 2, 1);
 				eventCount++;
 			}
 		}
@@ -203,11 +203,11 @@ JNIEXPORT jbyteArray JNICALL Java_org_bbi_linuxjoy_NoJoy_nativePoll
 			}
 			if (dz_check(prevVal) && !dz_check(tempVal)) {
 				tempVal = 0;
-				populate(buf, eventCount * 8, time, tempVal, 2, 3);
+				nj_put(buf, eventCount * 8, time, tempVal, 2, 3);
 				eventCount++;
 			}
 			else if (dz_check(tempVal)) {
-				populate(buf, eventCount * 8, time, tempVal, 2, 3);
+				nj_put(buf, eventCount * 8, time, tempVal, 2, 3);
 				eventCount++;
 			}
 		}
@@ -221,14 +221,14 @@ JNIEXPORT jbyteArray JNICALL Java_org_bbi_linuxjoy_NoJoy_nativePoll
 			tempVal ^= 0xffff; // flip to match LinuxJoystick API
 			if (dz_check(prevVal) && !dz_check(tempVal)) {
 				tempVal = 0;
-				populate(buf, eventCount * 8, time, tempVal, 2, 4);
+				nj_put(buf, eventCount * 8, time, tempVal, 2, 4);
 				eventCount++;
 			}
 			else if (dz_check(tempVal)) {
 				if (tempVal == -32768) {
 					tempVal = -32767;
 				}
-				populate(buf, eventCount * 8, time, tempVal, 2, 4);
+				nj_put(buf, eventCount * 8, time, tempVal, 2, 4);
 				eventCount++;
 			}
 		}
