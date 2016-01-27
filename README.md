@@ -4,11 +4,14 @@ LinuxJoystick is a Java joystick input library. The library provides Joystick in
 
 The following is an example code that uses the library:
 
+
 ```java
 import org.bbi.linuxjoy.*;
 ```
 
 Initialization and using the provided polling thread:
+
+
 ```java
 LinuxJoystick j = JoyFactory.getFirstUsableDevice();
 if(j != null) {
@@ -18,6 +21,8 @@ if(j != null) {
 ```
 
 Callback handler class with a function that is called whenever a joystick event has occured:
+
+
 ```java
 class EventCallbackHandler implements LinuxJoystickEventCallback {
 	public void callback(LinuxJoystick j, LinuxJoystickEvent ev) {
@@ -51,6 +56,8 @@ class EventCallbackHandler implements LinuxJoystickEventCallback {
 An alternative to using the callback handler is to write your own polling thread by calling the `poll()` function of LinuxJoystick and checking the axis and button states immediately after the poll. The `poll()` function is a blocking function when no native library is being used.
 
 To close the device, call the following function:
+
+
 ```java
 j.close(); // will also stop the polling thread
 ```
@@ -64,6 +71,7 @@ You will need a JDK and `ant` to build the library. If they're configured proper
 ## Device Enumeration
 
 To get a list of devices that the library detects, do the following:
+
 
 ```java
 int[] joyInfo = JoyFactory.enumerate();
@@ -92,11 +100,13 @@ The native library development files are in the `LinuxJoystick/native` directory
 
 Make sure the native library is in your Java library path (`java.library.path` property). For example, if your Java program, the LinuxJoystick library, and the Windows native library (`njnative.dll`) are in the same directory, you can use the following command to run your program in Windows:
 
+
 ```
 java -cp LinuxJoystick.jar;YourProgram.jar -Djava.library.path=. yourpackage.YourProgram
 ```
 
 Or if your program is a single class file (e.g. `YourProgram.class`):
+
 
 ```
 java -cp LinuxJoystick.jar;. -Djava.library.path=. YourProgram
@@ -105,6 +115,7 @@ java -cp LinuxJoystick.jar;. -Djava.library.path=. YourProgram
 ### Force Use Native Library
 
 You can force LinuxJoystick to use the native library in your Java program by omitting JoyFactory and using the native interface directly. Instead of using `JoyFactory.enumerate()` and `JoyFactory.get(index)` to enumerate and get a handle to your device, you use:
+
 
 ```java
 int joyInfo[] = NoJoy.getEnumeration()
