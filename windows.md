@@ -1,6 +1,6 @@
 # Windows XInput Native Library
 
-A Windows [XInput](https://msdn.microsoft.com/en-us/library/windows/desktop/hh405053(v=vs.85).aspx) native library that implements the native API is included in LinuxJoystick. The source code of the native library is named [`winxinput.cpp`](LinuxJoystick/native/winxinput.cpp). This library can be compiled in Visual Studio 2015 with the provided solution file in `LinuxJoystick/native/njnative` and will generate `njnative.dll`.
+A Windows [XInput](https://msdn.microsoft.com/en-us/library/windows/desktop/hh405053(v=vs.85).aspx) native library that implements the native API is included in LinuxJoystick. The source code of the native library is named [`winxinput.cpp`](LinuxJoystick/native/winxinput.cpp). This library can be compiled in Visual Studio 2015 (only the Community version was tested) with the provided solution file in `LinuxJoystick/native/njnative` and will generate `njnative.dll`.
 
 **Note:** The architecture of the native library must match with the JVM architecture. E.g. a 32-bit native library will not be able to link with LinuxJoystick running on a 64-bit JVM, and vice versa. `NoJoy` keeps a stack trace if a link failure has occured. This stack trace can be accessed with the `NoJoy.getLinkErrorString()` function.
 
