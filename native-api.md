@@ -19,7 +19,7 @@ public native String getVersionString()
 private native int[] enumerate() // used in getEnumeration()
 private native byte[] nativePoll() // used in channelRead()
 private native boolean openNativeDevice(int index) // used in channelOpen()
-private native boolean isNativeDeviceOpen(int index) // use in channelRead()
+private native boolean isNativeDeviceOpen(int index) // used in channelRead()
 private native void closeNativeDevice(int index) // used in channelClose()
 
 // Set native property, very non-portable as it is native library-specific
