@@ -11,19 +11,19 @@ LinuxJoystick has a native API that can be used to interface with devices that c
 public NoJoy(int index)
 
 // Public Java functions
-public int[] getEnumeration()
-public String getLinkErrorString() // contains stack trace if linking failed
+public static int[] getEnumeration()
+public static String getLinkErrorString() // contains stack trace if linking failed
 
 // Native functions, accessed by public wrapper functions if private
-public native String getVersionString()
-private native int[] enumerate()
+public static native String getVersionString()
+private static native int[] enumerate()
 private native byte[] nativePoll(int index)
 private native boolean openNativeDevice(int index)
 private native boolean isNativeDeviceOpen(int index)
 private native void closeNativeDevice(int index)
 
 // Set native property, very non-portable as it is native library-specific
-public native byte[] setNativeProperty(int index, int key, int value)
+public static native byte[] setNativeProperty(int index, int key, int value)
 ```
 
 A native library implementing this interface will have to implement all the specified native functions. `NoJoy` overrides `channelOpen()`, `channelRead()`, and `channelClose()` of `LinuxJoystick` to use these functions to access and read controller devices. The native `enumerate()` function is wrapped by the public Java `getEnumeration()` function.
