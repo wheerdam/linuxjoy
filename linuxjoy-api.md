@@ -51,9 +51,25 @@ Two functions `getAxisState(int index)` and `getButtonState(int index)` can be u
 
 ### Joystick Event Object and Asynchronous Joystick State Retrieval
 
-`LinuxJoystick` has a couple of callback points that can be used by the user to asynchronously check on the controller's states. This callback expects an implementation of the `LinuxJoystickEventCallback` interface in the library. The `LinuxJoystickEventCallback` interface has a single function that will need to be implemented: `callback(LinuxJoystick j, LinuxJoystickEvent ev)`. Use `setCallback(LinuxJoystickEventCallback)` to register the callback object that you have implemented. `LinuxJoystick` will perform the callback whenever an event has occured. Combined with the polling thread (or a user-defined thread that calls `poll()`), the user can implement an event handling mechanism that is asynchronous with the rest of the program.
+`LinuxJoystick` has a couple of callback points that can be used by the user to asynchronously check on the controller's states. This callback expects an implementation of the `LinuxJoystickEventCallback` interface in the library. The `LinuxJoystickEventCallback` interface has a single function that will need to be implemented: 
 
-In the callback function, the user can either use the provided reference to the `LinuxJoystick` instance to inspect the controller states, or the user can use the event reference itself to determine what has occured. The `LinuxJoystickEvent` class has three useful functions that can be used to determine a state change: `isAxisChanged()`, `isButtonDown()`, and `isButtonUp()`. Each of the function will return the index of the axis or the button that the event corresponds to. The functions will return `-1` if it is not the correct event. The [README document](README.md) for the library has an example code that takes advantage of this interface.
+```java
+public interface LinuxJoystickEventCallback {
+	public void callback(LinuxJoystick j, LinuxJoystickEvent ev);
+}
+```
+
+Use `setCallback(LinuxJoystickEventCallback)` to register the callback object that you have implemented. `LinuxJoystick` will perform the callback whenever an event has occured. Combined with the polling thread (or a user-defined thread that calls `poll()`), the user can implement an event handling mechanism that is asynchronous with the rest of the program.
+
+In the callback function, the user can either use the provided reference to the `LinuxJoystick` instance to inspect the controller states, or the user can use the event reference itself to determine what has occured. The `LinuxJoystickEvent` class has three useful functions that can be used to determine a state change:
+
+```java
+public int isAxisChanged()
+public int isButtonDown()
+public int isButtonUp()
+```
+
+Each of the function will return the index of the axis or the button that the event corresponds to. The functions will return `-1` if it is not the correct event. The [README document](README.md) for the library has an example code that takes advantage of this interface by utilizing switch statements.
 
 `LinuxJoystick` also has a `setCloseCallback(LinuxJoystickEventCallback)` function that sets a callback that gets called when the `close()` function is called. The event field of the `callback(LinuxJoystick j, LinuxJoystickEvent ev)` function will be `null` when the callback is performed. **Do not call `close()` within this callback** as this will cause a circular call that will overflow the call stack and crash the program.
 
