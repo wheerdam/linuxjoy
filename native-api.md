@@ -4,7 +4,7 @@ LinuxJoystick has a native API that can be used to interface with devices that c
 
 ## The NoJoy Class
 
-`NoJoy` is an extension of the `LinuxJoystick` class that overrides the data access functions to use native functions instead of reading from a file. The following is the list of functions in the class:
+[`NoJoy`](LinuxJoystick/src/org/bbi/linuxjoy/NoJoy.java) is an extension of the `LinuxJoystick` class that overrides the data access functions to use native functions instead of reading from a file. The following is the list of functions in the class:
 
 ```java
 // Constructor
