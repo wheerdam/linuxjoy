@@ -112,7 +112,7 @@ public void channelClose() { ... }
 
 `fc` is the channel object that is used by `LinuxJoystick` to open and read the Linux joystick device. If the user subclass does not use channels, this member can be ignored completely. 
 
-The `path` member is the resource identifier (e.g. path to device file for `LinuxJoystick`). In some cases the subclass only needs a numerical identifier. If this is the case, the identifier will still need to be stored as a `String` and only casted to an integer when it is actually being used. `LinuxJoystick` does not have an empty constructor, so a `super` must be passed on in the subclass' constructor, e.g.:
+The `path` member is the resource identifier (e.g. path to device file for `LinuxJoystick`). In some cases the subclass may only need a numerical identifier. If this is the case, the identifier will still need to be stored as a `String` in the constructor and then type casted to an integer when it is actually being used in the channel functions. `LinuxJoystick` does not have an empty constructor, so a `super` must be passed on in the subclass' constructor, e.g.:
 
 
 ```java
