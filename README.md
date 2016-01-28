@@ -53,18 +53,13 @@ class EventCallbackHandler implements LinuxJoystickEventCallback {
 }
 ```
 
-An alternative to using the callback handler is to write your own polling thread by calling the `poll()` function of LinuxJoystick and checking the axis and button states immediately after the poll. The `poll()` function is a blocking function when no native library is being used.
+You can also just run the polling thread in the background and use `j.getButtonState(int index)` and `j.getAxisState(int index)` to get the states of the controller. Check out the [linuxjoy-api document](linuxjoy-api.md) for more detailed information about LinuxJoystick API.
 
 To close the device, call the following function:
-
 
 ```java
 j.close(); // will also stop the polling thread
 ```
-
-Any blocking `poll()` will be interrupted when `close()` is called.
-
-Check out the [linuxjoy-api document](linuxjoy-api.md) for more detailed information about LinuxJoystick API.
 
 ## Building the Library
 
