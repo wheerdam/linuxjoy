@@ -133,3 +133,7 @@ If the subclass' `channelRead()` is a blocking operation, **it must be interrupt
 
 Finally, the subclass will need to override `channelClose()` to clean up resources when the user determines that the input device is no longer needed.
 
+### LinuxJoystick Subclasses
+
+- [`NoJoy`](LinuxJoystick/src/org/bbi/linuxjoy/NoJoy.java) is a subclass of `LinuxJoystick` that uses JNI to access the controller through native library calls (see the [native-api document](native-api.md) for more information about this interface.
+- [`SocketJoystick`](LinuxJoystick/src/org/bbi/linuxjoy/SocketJoystick.java) is a subclass that uses a socket channel to retrieve the serialized joystick input data instead of a file.
