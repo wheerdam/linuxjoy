@@ -86,7 +86,7 @@ Use the `JoyFactory.get(int index)` function to get a `LinuxJoystick` reference 
 
 **Note:** `JoyFactory` currently does not support device identifier look-up in Linux and will always return a generic ID. The buttons and axes will be correctly reported.
 
-`JoyFactory` has the `getFirstUsableDevice()` function that will enumerate (if it has not been done already) and return a `LinuxJoystick` object of the first controller that has a valid ID to the caller. This function is useful if all the user wants to do is just attempt to get a controller that is connected to the computer and go from there. The function will return `null` if there is no device that can be used.
+`JoyFactory` has the `getFirstUsableDevice()` function that will enumerate (if it has not been done already) and return a `LinuxJoystick` object of the first controller that has a valid ID to the caller. This function is useful if all the user wants to do is to just attempt to get a controller that is connected to the computer and go from there. The function will return `null` if there is no device that can be used.
 
 ### ALWAYS_USE_NATIVE
 
