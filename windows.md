@@ -10,7 +10,31 @@ The native library will read the device status with XInput's `XInputGetState` fu
 
 As long as the native library is linked properly, the user program can use the LinuxJoystick library as usual. The XInput native library will not block on `poll()` as required by the [`NoJoy` native API](native-api.md). The native library will always report 4 devices on enumeration. The integer value of a device will be set to -1 if it is not connected. It will be set to 0x080B01 otherwise (8 axes, 11 buttons, Xbox controller). The Xbox button **will not work** as Windows will intercept this button (the Xbox button is reported as button 8 in Linux).
 
-The native library does not support the d-pad, yet. The d-pad is treated as axes in Linux (axes 6 and 7), but they are treated as buttons in XInput. Support will be coming soon, but it will be most likely follow the Linux model.
+| Button           | Event Number |
+|:----------------:|:------------:|
+| A                | 0            |
+| B                | 1            |
+| X                | 2            |
+| Y                | 3            |
+| Left Shoulder    | 4            |
+| Right Shoulder   | 5            |
+| BACK             | 6            |
+| START            | 7            |
+| Left Thumb       | 9            |
+| Right Thumb      | 10           |
+
+| Axis             | Event Number |
+|:----------------:|:------------:|
+| Left Thumb X     | 0            |
+| Left Thumb Y     | 1            |
+| Left Trigger     | 2            |
+| Right Thumb X    | 3            |
+| Right Thumb Y    | 4            |
+| Right Trigger    | 5            |
+| D-pad X*         | 6            |
+| D-pad Y*         | 7            |
+
+The native library does not support the D-pad, yet. The D-pad is treated as axes in Linux (axes 6 and 7), but they are treated as buttons in XInput. Support will be coming soon, but it will be most likely follow the Linux model. The following is the button and axis mapping for this controller (following Linux Xbox mapping):
 
 ## Miscellaneous
 
