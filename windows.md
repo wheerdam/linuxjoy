@@ -34,7 +34,7 @@ As long as the native library is linked properly, the user program can use the L
 | D-pad X*         | 6            | -32767 to 32767, left negative    |
 | D-pad Y*         | 7            | -32767 to 32767, forward negative |
 
-The native library does not support the D-pad, yet. The D-pad is treated as axes in Linux (axes 6 and 7), but they are treated as buttons in XInput. Support will be coming soon, but it will be most likely follow the Linux model. The following is the button and axis mapping for this controller (following Linux Xbox mapping):
+The native library does not support the D-pad, yet. The D-pad is treated as axes in Linux (axes 6 and 7), but they are treated as buttons in XInput. Support will be coming soon, but it will be most likely follow the Linux model.
 
 ## Miscellaneous
 
