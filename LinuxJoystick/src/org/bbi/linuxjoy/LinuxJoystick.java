@@ -111,7 +111,7 @@ public class LinuxJoystick {
 				reset();
 			}
 			threadSleepMs = sleepMs;
-		System.out.println(this + ": polling thread with " + threadSleepMs + " ms interval started");
+			System.out.println(this + ": polling thread with " + threadSleepMs + " ms interval started");
 			pt = new PollingThread();
 			pt.start();
 		}
