@@ -53,7 +53,7 @@ class EventCallbackHandler implements LinuxJoystickEventCallback {
 }
 ```
 
-You can also just run the polling thread in the background and use `j.getButtonState(int index)` and `j.getAxisState(int index)` to get the states of the controller. Check out the [linuxjoy-api document](linuxjoy-api.md) for more detailed information about LinuxJoystick API.
+You can also just run the polling thread in the background and use `j.getButtonState(int index)` and `j.getAxisState(int index)` to get the states of the controller at your leisure (e.g. in your game loop). Check out the [linuxjoy-api document](linuxjoy-api.md) for more detailed information about LinuxJoystick API.
 
 To close the device, call the following function:
 
