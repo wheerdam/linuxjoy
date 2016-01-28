@@ -103,9 +103,9 @@ protected String path;
 protected ByteBuffer buf = ByteBuffer.allocate(8192);
 protected boolean deviceOpen;
 
-public boolean channelOpen() { ... }
-public int channelRead() { ... }
-public void channelClose() { ... }
+protected boolean channelOpen() { ... }
+protected int channelRead() { ... }
+protected void channelClose() { ... }
 ```
 
 ### Data Source Identifier and channelOpen()
