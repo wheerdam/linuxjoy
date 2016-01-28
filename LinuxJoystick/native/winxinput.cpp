@@ -126,6 +126,46 @@ JNIEXPORT jbyteArray JNICALL Java_org_bbi_linuxjoy_NoJoy_nativePoll
 				nj_put(buf, eventCount * 8, time, (currButtons & XINPUT_GAMEPAD_RIGHT_THUMB) >> 7, 1, 10);
 				eventCount++;
 			}
+			if ((currButtons & XINPUT_GAMEPAD_DPAD_UP) != (prevButtons & XINPUT_GAMEPAD_DPAD_UP)) {
+				if ((currButtons & XINPUT_GAMEPAD_DPAD_UP) == 0x0001) {
+					nj_put(buf, eventCount * 8, time, -32767, 2, 7);
+					eventCount++;
+				}
+				else if ((currButtons & XINPUT_GAMEPAD_DPAD_DOWN) == 0) {
+					nj_put(buf, eventCount * 8, time, 0, 2, 7);
+					eventCount++;
+				}				
+			}
+			if ((currButtons & XINPUT_GAMEPAD_DPAD_DOWN) != (prevButtons & XINPUT_GAMEPAD_DPAD_DOWN)) {
+				if ((currButtons & XINPUT_GAMEPAD_DPAD_DOWN) == 0x0002) {
+					nj_put(buf, eventCount * 8, time, 32767, 2, 7);
+					eventCount++;
+				}
+				else if ((currButtons & XINPUT_GAMEPAD_DPAD_UP) == 0) {
+					nj_put(buf, eventCount * 8, time, 0, 2, 7);
+					eventCount++;
+				}				
+			}
+			if ((currButtons & XINPUT_GAMEPAD_DPAD_LEFT) != (prevButtons & XINPUT_GAMEPAD_DPAD_LEFT)) {
+				if ((currButtons & XINPUT_GAMEPAD_DPAD_LEFT) == 0x0004) {
+					nj_put(buf, eventCount * 8, time, -32767, 2, 6);
+					eventCount++;
+				}
+				else if ((currButtons & XINPUT_GAMEPAD_DPAD_RIGHT) == 0) {
+					nj_put(buf, eventCount * 8, time, 0, 2, 6);
+					eventCount++;
+				}				
+			}
+			if ((currButtons & XINPUT_GAMEPAD_DPAD_RIGHT) != (prevButtons & XINPUT_GAMEPAD_DPAD_RIGHT)) {
+				if ((currButtons & XINPUT_GAMEPAD_DPAD_RIGHT) == 0x0008) {
+					nj_put(buf, eventCount * 8, time, 32767, 2, 6);
+					eventCount++;
+				}
+				else if ((currButtons & XINPUT_GAMEPAD_DPAD_LEFT) == 0) {
+					nj_put(buf, eventCount * 8, time, 0, 2, 6);
+					eventCount++;
+				}
+			}
 		}
 
 		// check triggers.

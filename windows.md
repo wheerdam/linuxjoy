@@ -31,10 +31,10 @@ As long as the native library is linked properly, the user program can use the L
 | Right Thumb X    | 3            | -32767 to 32767, left negative    |
 | Right Thumb Y    | 4            | -32767 to 32767, forward negative |
 | Right Trigger    | 5            | -32767 to 32767, neutral negative |
-| D-pad X*         | 6            | -32767 to 32767, left negative    |
-| D-pad Y*         | 7            | -32767 to 32767, forward negative |
+| D-pad X          | 6            | -32767 to 32767, left negative    |
+| D-pad Y          | 7            | -32767 to 32767, forward negative |
 
-The native library does not support the D-pad, yet. The D-pad is treated as axes in Linux (axes 6 and 7), but they are treated as buttons in XInput. Support will be coming soon, but it will be most likely follow the Linux model.
+The D-pad is treated as buttons by XInput. The library interprets it as axes so it is consistent with how the Linux `xpad` driver reports the D-pad.
 
 ## Miscellaneous
 
