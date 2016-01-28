@@ -17,7 +17,7 @@ public String getLinkErrorString() // contains stack trace if linking failed
 // Native functions, accessed by public wrapper functions if private
 public native String getVersionString()
 private native int[] enumerate()
-private native byte[] nativePoll()
+private native byte[] nativePoll(int index)
 private native boolean openNativeDevice(int index)
 private native boolean isNativeDeviceOpen(int index)
 private native void closeNativeDevice(int index)
@@ -29,14 +29,14 @@ public native byte[] setNativeProperty(int index, int key, int value)
 A native library implementing this interface will have to implement all the specified native functions. `NoJoy` overrides `channelOpen()`, `channelRead()`, and `channelClose()` of `LinuxJoystick` to use these functions to access and read controller devices. The native `enumerate()` function is wrapped by the public Java `getEnumeration()` function.
 
 The native functions should be self-explanatory. The following is a collection of contracts that must be fulfilled by the native library implementing the native functions to ensure proper execution of the program:
-- `enumerate()` must return an array of integer with each element describing the enumerated device as described in the [linuxjoy-api](linuxjoy-api.md) document
+- `enumerate` must return an array of integer with each element describing the enumerated device as described in the [linuxjoy-api](linuxjoy-api.md) document
 - The framework will use the array indexing that the native library returned with `enumerate()` to identify which device is being used. Make sure the numbering is internally consistent in the native library
-- `nativePoll()` must return serialized [Linux Joystick API](https://www.kernel.org/doc/Documentation/input/joystick-api.txt) packets (4-byte timestamp, 2-byte value, 1-byte type, and 1-byte number)
-- `nativePoll()` may return up to 8KB worth of data
-- `nativePoll()` must **not** block because there is not a safe way to interrupt a JNI call
-- `nativePoll()` may return an empty array if there is no data. The function may **not** return a null pointer
-- `nativePoll()` may return torn 8-byte data as long as it can complete it in subsequent polls (or the device is closed beforehand)
-- `openNativeDevice(int index)` and `isNativeDeviceOpen(int index)` must return the correct device status
+- `nativePoll` must return serialized [Linux Joystick API](https://www.kernel.org/doc/Documentation/input/joystick-api.txt) packets (4-byte timestamp, 2-byte value, 1-byte type, and 1-byte number)
+- `nativePoll` may return up to 8KB worth of data
+- `nativePoll` must **not** block because there is not a safe way to interrupt a JNI call
+- `nativePoll` may return an empty array if there is no data. The function may **not** return a null pointer
+- `nativePoll` may return torn 8-byte data as long as it can complete it in subsequent polls (or the device is closed beforehand)
+- `openNativeDevice` and `isNativeDeviceOpen` must return the correct device status
 - `setNativeProperty` is not part of the official API and will not be used by support classes like `JoyFactory` in the LinuxJoystick library. Users wanting to use this function with a particular native library will have to implement it in the user program
 
 `setNativeProperty` is a utility / debug function that can be called from the JVM to set some values in the native library, and / or to retrieve some non-joystick event data from the native library. This is a non-portable function that is not used internally in the LinuxJoystick library. The native library can return a null pointer and leave the rest of the function empty to satisfy the API if the functionality is not desired.
