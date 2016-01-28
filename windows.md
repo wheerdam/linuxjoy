@@ -8,7 +8,7 @@ The native library will read the device status with XInput's `XInputGetState` fu
 
 ## Usage
 
-As long as the native library can be linked properly, the user program can use the LinuxJoystick library as usual. The XInput native library will not block on `poll()` as required by the [`NoJoy` native API](native-api.md). The native library will always report 4 devices on enumeration. The integer value of a device will be set to -1 if it is not connected. It will be set to 0x080B01 otherwise (8 axes, 11 buttons, Xbox controller). The Xbox button **will not work** as Windows will intercept this button (the Xbox button is reported as button 8 in Linux).
+As long as the native library is linked properly, the user program can use the LinuxJoystick library as usual. The XInput native library will not block on `poll()` as required by the [`NoJoy` native API](native-api.md). The native library will always report 4 devices on enumeration. The integer value of a device will be set to -1 if it is not connected. It will be set to 0x080B01 otherwise (8 axes, 11 buttons, Xbox controller). The Xbox button **will not work** as Windows will intercept this button (the Xbox button is reported as button 8 in Linux).
 
 The native library does not support the d-pad, yet. The d-pad is treated as axes in Linux (axes 6 and 7), but they are treated as buttons in XInput. Support will be coming soon, but it will be most likely follow the Linux model.
 
