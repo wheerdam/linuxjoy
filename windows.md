@@ -14,7 +14,7 @@ The native library does not support the d-pad, yet. The d-pad is treated as axes
 
 ## Miscellaneous
 
-The NoJoy Windows XInput library has a few properties that can be useful:
+The NoJoy Windows XInput library has a few properties that can be useful (use `NoJoy.setNativeProperty` to set these values):
 
 - Key=0 - set dead zone value (0 to 32767) for the specified controller in the index value
 - Key=1 - set vibration setting for the specified controller. High 16-bit of value field is LEFT motor, and the lower 16-bit controls the RIGHT motor
