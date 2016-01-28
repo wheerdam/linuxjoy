@@ -1,6 +1,6 @@
 # linuxjoy
 
-LinuxJoystick is a Java joystick input library. The library provides Joystick input device enumeration function, device polling, and an event handling mechanism. Contrary to its name, LinuxJoystick can be used in other platforms without having to modify the user Java program. This is accomplished using native libraries. LinuxJoystick will function with just the JRE in Linux unless the user prefers an in-house native implementation.
+LinuxJoystick is a Java joystick input library. The library provides Joystick input device enumeration function, device polling, and an event handling mechanism. Contrary to its name, LinuxJoystick can be used in other platforms without having to modify the user Java program by using native libraries. LinuxJoystick will function with only the JRE in Linux unless the user prefers an in-house native implementation.
 
 The following is an example code that uses the library:
 
