@@ -83,7 +83,17 @@ The joystick information has the following encoding for each byte:
 |:---:|:--------------:|:-----------------:|:----:|
 |  -  | Number of Axes | Number of Buttons |  ID  |
 
-`JoyFactory.enumerate()` will return `null` if no joysticks were found. It will return a value of -1 for a specific entry if it was unable to gather information about that particular controller. Use `JoyFactory.get(index)` to get a `LinuxJoystick` handle to the device, open it, and start jamming. If you do not want to enumerate the devices manually and just want to get the first device `JoyFactory` can detect and use, use the `JoyFactory.getFirstUsableDevice()` as in the previous example code to get your joystick handle. This function will return `null` if it can not find any device to use.
+`JoyFactory.enumerate()` will return `null` if no joysticks were found. It will return a value of -1 for a specific entry if it was unable to gather information about that particular controller. Use `JoyFactory.get(index)` to get a `LinuxJoystick` handle to the device you would like to use, open it, and start jamming:
+
+```java
+LinuxJoystick j = JoyFactory.get(0);  // get first device
+j.open();
+j.startPollingThread(5);
+
+// do stuff
+```
+
+If you do not want to enumerate the devices manually and just want to get the first device `JoyFactory` can detect and use, use the `JoyFactory.getFirstUsableDevice()` as in the previous example code to get your joystick handle. This function will return `null` if it can not find any device to use.
 
 ## Other Platforms
 

@@ -42,7 +42,7 @@ The function `setButtonsAxes(int buttons, int axes)` can be used to update the n
 
 ### Background Polling Thread
 
-`LinuxJoystick` can have a background thread running that will regularly poll the controller. The thread can be started using the `startPollingThread(int interval)` function. The interval is the number of milliseconds between `poll()` calls. The polling thread can be interrupted and stopped at anytime by calling the `stopPollingThread()` function. Closing the controller with `close()` will also interrupt and stop the polling thread.
+`LinuxJoystick` can have a background thread running that will regularly poll the controller. The thread is started using the `startPollingThread(int interval)` function. The interval is the number of milliseconds between `poll()` calls. The polling thread can be interrupted and stopped at anytime by calling the `close()` function. The `stopPollingThread()` function will not interrupt the thread if it is currently being blocked by a read. Always use `close()` to interrupt and stop the the thread, and then you can use `open()` if you want to continue to use the same device at a latter time.
 
 The functions that update the Joystick states data structure are synchronized with the functions that the user can use to retrieve this data structure. The user does not have to be concerned about ensuring that there is no race condition while reading off the Joystick with the polling thread running.
 
