@@ -93,7 +93,7 @@ Note: the `poll()` function of the native library is non-blocking and will retur
 
 The native library development files are in the `LinuxJoystick/native` directory. `org_bbi_linuxjoy_NoJoy.h` is the header that has the JNI function signatures of the Java native functions. `winxinput.cpp` is the C++ source that implements this interface and uses Windows XInput API to access the game controllers. A Visual Studio 2015 solution is provided in `LinuxJoystick/native/njnative` to build the `njnative.dll` Windows library.
 
-See the [native-api document](native-api.md) for more information about the LinuxJoystick native API and the [windows document](windows.md) for information about the Windows XInput native library.
+See the [native-api document](native-api.md) for more information about the LinuxJoystick native API and the [windows document](windows.md) for information about the Windows XInput native library. A [Linux native library](LinuxJoystick/native/njnative-linux) is also available if the user prefers a non-blocking `poll()` function.
 
 ### Running LinuxJoystick with Native Library
 
