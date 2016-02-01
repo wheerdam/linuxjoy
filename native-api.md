@@ -52,4 +52,4 @@ The native library must be compiled as shared library `njnative.dll` in Windows 
 ## NoJoy Implementations
 
 - [Windows NoJoy native library](windows.md) that uses XInput to interface with Xbox controllers.
-- [Linux NoJoy native library](LinuxJoystick/native/njnative-linux), a non-blocking native library for Linux. This library reads off the joystick file and pass along the data. The native poll function will return an empty array if there is no queued input data instead of blocking.
+- [Linux NoJoy native library](LinuxJoystick/native/njnative-linux), a non-blocking native library for Linux. This library reads off the joystick file and passes the data along as-is. The native poll function will return an empty array if there is no queued input data instead of blocking.
