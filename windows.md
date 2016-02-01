@@ -40,8 +40,10 @@ The D-pad is treated as buttons by XInput. The library interprets it as axes so 
 
 The NoJoy Windows XInput library has a few properties that can be useful (use `NoJoy.setNativeProperty` to set these values):
 
-- Key=0 - set dead zone value (0 to 32767) for all the controllers being used (you can't set per-controller dead zone value with this library)
-- Key=1 - set vibration setting for the specified controller. High 16-bit of value field is LEFT motor, and the lower 16-bit controls the RIGHT motor
-- Key=2 - return version array (4 bytes)
- 
+| Key | Values     | Description                            |
+|-----|------------|----------------------------------------|
+| 0   | 0 to 32767 | Dead-zone value for ALL controllers    |
+| 1   | 32-bit     | Set vibration setting for the specified controller. High 16-bit of value field is LEFT motor, and the lower 16-bit controls the RIGHT motor |
+| 2   | -          | Return version in 4-byte array         |
+
 `getVersionString()` will return "NoJoy Windows XInput (njnative.dll) v1.00" with possible different version number.
