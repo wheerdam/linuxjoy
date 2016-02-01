@@ -160,17 +160,20 @@ public class LinuxJoystick {
 	 * is running will stop the thread
 	 */
 	public void close() {
+		deviceOpen = false;
+		
 		if(pt != null) {
 			pt.stopPolling();
 			pt = null;
 		}
 
-		channelClose();
-		deviceOpen = false;
+		channelClose();		
 
 		if(closeCallback != null) {
 			closeCallback.callback(this, null);
 		}
+		
+		System.out.println(this + ": closed");
 	}
 
 	/**
@@ -179,7 +182,7 @@ public class LinuxJoystick {
 	 */
 	private void read() {
 		if(!deviceOpen) {
-			System.err.println("ljs: input file is not open");
+			System.err.println(this + ": input file is not open");
 			return;
 		}
 
@@ -225,8 +228,14 @@ public class LinuxJoystick {
 				}
 			}
 		} catch(IOException ioe) {
-			System.err.println(this + ": read exception, closing");
-			close();
+			System.err.println(this + ": read exception");
+			
+			// only call close() if we are interrupted due to read error
+			// and not because the user called close() earlier (which
+			// will set deviceOpen to false)
+			if(deviceOpen) {
+				close();
+			}
 		}
 	}
 
@@ -270,7 +279,7 @@ public class LinuxJoystick {
 				fc.close();
 			}
 		} catch(IOException ioe) {
-			System.err.println("ljs: close I/O exception: " + ioe.getMessage());
+			System.err.println(this + ": close I/O exception: " + ioe.getMessage());
 		}
 
 		fc = null;
@@ -386,7 +395,7 @@ public class LinuxJoystick {
 
 	@Override
 	public String toString() {
-		return "LinuxJoystick" + (deviceOpen ? "(" + path + ")" : "");
+		return "LinuxJoystick(" + path + ")";
 	}
 
 	class PollingThread extends Thread {
@@ -397,21 +406,15 @@ public class LinuxJoystick {
 			if(!deviceOpen)
 				return;
 
-			//System.out.println("ljs(" + path + "): polling thread is running");
-
-			while(!stop) {
-				if(!deviceOpen) {
-					stop = true;
-				}
-
+			while(!stop && deviceOpen) {
 				try {
-					read();
 					Thread.sleep(threadSleepMs);
+					read();					
 				} catch(Exception e) {
 
 				}
 			}
-			//System.out.println("ljs" + (fr != null ? "(" + path + ")" : "") + ": polling thread exiting");
+			System.out.println("PollingThread: exit");
 		}
 
 		public void stopPolling() {

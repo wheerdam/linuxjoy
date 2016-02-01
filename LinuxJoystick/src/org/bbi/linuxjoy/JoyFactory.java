@@ -124,9 +124,10 @@ public class JoyFactory {
 	 */
 	public static LinuxJoystick get(int index) {
 		if(jjs == null) {
-			System.err.println("JoyFactor: devices have not been enumerated");
+			System.err.println("JoyFactory: devices have not been enumerated");
 			return null;
 		} else if(index < 0 || index >= jjs.length) {
+			System.err.println("JoyFactory: invalid index " + index);
 			return null;
 		}
 		return jjs[index];

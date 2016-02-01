@@ -1,12 +1,28 @@
+/*
+	Copyright 2016 Wira Mulia
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "../org_bbi_linuxjoy_NoJoy.h"
 #include <jni.h>
-#include <dirent.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <string.h>
 #include <linux/joystick.h>
 
-#define MAX_DEVICES 64 // less than 100
+#define MAX_DEVICES 64
 
 static int fd[MAX_DEVICES];
 static int index_map[MAX_DEVICES];
@@ -33,22 +49,15 @@ JNIEXPORT jboolean JNICALL Java_org_bbi_linuxjoy_NoJoy_openNativeDevice
   (JNIEnv *env, jobject obj, jint index)
 {
 	int i;
-	char file_index[3];
+	char file_index[8];
 	char path[256] = "/dev/input/js";
 
-	if(index < 0 || index >= device_count) {
+	if(index < 0 || index >= device_count){
 		printf("njnative[%d]: invalid index\n", index);
 		return JNI_FALSE;
 	} else {
-		i = index_map[index];
-		if(i < 10) {
-			file_index[0] = i + '0';
-			file_index[1] = 0;
-		} else {
-			file_index[0] = (i / 10) + '0';
-			file_index[1] = (i % 10) + '0';
-			file_index[2] = 0;
-		}
+		i = index_map[index];  // get our file #
+		snprintf(file_index, 8, "%d", i);
 		strncat(path, file_index, 256);
 		fd[index] = open(path, O_RDONLY | O_NONBLOCK);
 		if(fd[index] == -1) {
@@ -60,7 +69,6 @@ JNIEXPORT jboolean JNICALL Java_org_bbi_linuxjoy_NoJoy_openNativeDevice
 		}
 	}
 }
-
 
 JNIEXPORT jboolean JNICALL Java_org_bbi_linuxjoy_NoJoy_isNativeDeviceOpen
   (JNIEnv *env, jobject obj, jint index)
@@ -79,31 +87,29 @@ JNIEXPORT jintArray JNICALL Java_org_bbi_linuxjoy_NoJoy_enumerate
 {
 	int i, fd;
 	char buttons, axes;
-	char index[3];
-	char path[256] = "/dev/input/js";
+	char file_index[8];
+	char prefix[] = "/dev/input/js";
+	char path[256];
 	int joyinfo[MAX_DEVICES];
 
 	// reset device count
 	device_count = 0;
 
-	// map our indexing with jsXX files
+	// iterate through /dev/input/jsXX
 	for(i = 0; i < MAX_DEVICES; i++) {
-		if(i < 10) {
-			index[0] = i + '0';
-			index[1] = 0;
-		} else {
-			index[0] = (i / 10) + '0';
-			index[1] = (i % 10) + '0';
-			index[2] = 0;
-		}
-		strncat(path, index, 256);
+		path[0] = 0;
+		strncat(path, prefix, 256);
+		snprintf(file_index, 16, "%d", i);
+		strncat(path, file_index, 256);
 		fd = open (path, O_RDONLY | O_NONBLOCK);
-		if(fd != -1) {
-			joyinfo[device_count] = 0x00; // report generic
-			index_map[device_count] = i;
+		
+		// we have a device file we can open
+		if(fd != -1) {			
+			index_map[device_count] = i;  // map our count with file #
 			ioctl(fd, JSIOCGBUTTONS, &buttons);
-			joyinfo[device_count] |= (buttons << 8);
 			ioctl(fd, JSIOCGAXES, &axes);
+			joyinfo[device_count] = 0x00; // report generic
+			joyinfo[device_count] |= (buttons << 8);			
 			joyinfo[device_count] |= (axes << 16);
 			printf("njnative[%d]: %s detected (%d buttons, %d axes)\n",
 				 device_count, path, buttons, axes);
@@ -143,7 +149,7 @@ JNIEXPORT jbyteArray JNICALL Java_org_bbi_linuxjoy_NoJoy_setNativeProperty
 JNIEXPORT jstring JNICALL Java_org_bbi_linuxjoy_NoJoy_getVersionString
   (JNIEnv *env, jclass cls)
 {
-	char str[256] = "NoJoy Linux Non-blocking (libnjnative.so) v1.00";
+	char str[] = "NoJoy Linux Non-blocking (libnjnative.so) v1.00";
 	jstring r = (*env)->NewStringUTF(env, str);
 	return r;
 }
