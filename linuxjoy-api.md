@@ -8,9 +8,8 @@ This document describes the LinuxJoystick Library API. The description includes 
 
 
 ```java
-public void poll()
 public void open()
-public void reset()
+public void poll()
 public void close()
 public void setButtonsAxes(int buttons, int axes)
 
