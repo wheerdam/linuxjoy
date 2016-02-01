@@ -84,12 +84,15 @@ public class LinuxJoystick {
 	public LinuxJoystick(String path, int buttons, int axes) {
 		int i;
 		deviceOpen = false;
-		open(path, buttons, axes);
 		stateChanged = false;
 		threadSleepMs = 5;
+		this.path = path;
+
+		buttonStates = new boolean[buttons];
+		axisStates = new int[axes];
 
 		for(i = 0; i < buttons; i++) {
-		buttonStates[i] = false;
+			buttonStates[i] = false;
 		}
 
 		for(i = 0; i < axes; i++) {
@@ -108,7 +111,7 @@ public class LinuxJoystick {
 			System.out.println(this + ": polling thread is already running");
 		} else {
 			if(!deviceOpen) {
-				reset();
+				open();
 			}
 			threadSleepMs = sleepMs;
 			System.out.println(this + ": polling thread with " + threadSleepMs + " ms interval started");
@@ -129,19 +132,14 @@ public class LinuxJoystick {
 	/**
 	 * Open the joystick device given by the path. Override channelOpen() if
 	 * data source is not coming from a file.
-	 *
-	 * @param path Path to the system device file, typically in /dev/input
-	 * @param buttons Number of buttons that the controller has
-	 * @param axes Number of axes that the controller has
 	 */
-	public final void open(String path, int buttons, int axes) {
+	public final void open() {
 		if(deviceOpen) {
 			close();
 		}
 
-		this.path = path;
-		buttonStates = new boolean[buttons];
-		axisStates = new int[axes];
+		buttonStates = new boolean[buttonStates.length];
+		axisStates = new int[axisStates.length];
 		nread = 0;
 		n = 0;
 
@@ -155,13 +153,6 @@ public class LinuxJoystick {
 	 */
 	public boolean isDeviceOpen() {
 		return deviceOpen;
-	}
-
-	/**
-	 * Reopen the device file
-	 */
-	public void reset() {
-		open(path, buttonStates.length, axisStates.length);
 	}
 
 	/**

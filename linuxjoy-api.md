@@ -9,7 +9,7 @@ This document describes the LinuxJoystick Library API. The description includes 
 
 ```java
 public void poll()
-public void open(String path, int buttons, int axes)
+public void open()
 public void reset()
 public void close()
 public void setButtonsAxes(int buttons, int axes)
@@ -34,6 +34,8 @@ The following is an example initialization of the class:
 // get a controller with 11 buttons and 8 axes on /dev/input/js0 
 LinuxJoystick j = new LinuxJoystick("/dev/input/js0", 11, 8);
 ```
+
+The `open()` function will open the specified device file.
 
 The `poll()` function then can be called to read any new data that the kernel driver writes out through the device file. `LinuxJoystick` will read this data and update the state of the joystick accordingly. `LinuxJoystick` uses `FileChannel` to open and read the device file. The `FileChannel` class allows an interruptible blocking read on the file. A thread should be utilized to regularly poll the controller so `LinuxJoystick` will not block the flow of the rest of the program when it is being polled.
 
@@ -98,11 +100,11 @@ The `enumerate()` class will attempt to open all detected Joystick devices in or
 | 0   | Generic                           |
 | 1   | Xbox 360 Controller               |
 
-Use the `JoyFactory.get(int index)` function to get a `LinuxJoystick` reference of the desired controller.
+Use the `JoyFactory.get(int index)` function to get a `LinuxJoystick` reference of the desired controller. The `get` function will only give a reference to the device object. The user will still need to use the `open()` function to actually open the device.
 
 **Note:** `JoyFactory` currently does not support device identifier look-up in Linux and will always return a generic ID. The buttons and axes will be correctly reported.
 
-`JoyFactory` has the `getFirstUsableDevice()` function that will enumerate (if it has not been done already) and return a `LinuxJoystick` object of the first controller that has a valid ID to the caller. This function is useful if all the user wants to do is to just attempt to get a controller that is connected to the computer and go from there. The function will return `null` if there is no device that can be used.
+`JoyFactory` has the `getFirstUsableDevice()` function that will enumerate (if it has not been done already) and open and return a `LinuxJoystick` object of the first controller that has a valid ID to the caller. This function is useful if all the user wants to do is to just attempt to get a controller that is connected to the computer and go from there. The function will return `null` if there is no device that can be used.
 
 ### ALWAYS_USE_NATIVE
 

@@ -75,6 +75,7 @@ public class JoyFactory {
 			for(i = 0; i < jf.length; i++) {
 				// use temporary number of buttons and axes
 				jjs[i] = new LinuxJoystick(f.getAbsolutePath() + "/" + jf[i], 64, 64); 
+				jjs[i].open();
 				if(jjs[i].isDeviceOpen()) {
 					// the linux joystick driver always puts out initial state events
 					// that we can use to determine the number of axes and buttons
@@ -91,7 +92,7 @@ public class JoyFactory {
 					System.out.println("JoyFactory enumerate(" + i + "): " +
 							init.getButtons() + " buttons and " +
 							init.getAxes() + " axes.");
-
+					jjs[i].close();
 				} else {
 					// we failed to open this device
 					joyInfo[i] = NOT_OPEN;
@@ -128,7 +129,6 @@ public class JoyFactory {
 		} else if(index < 0 || index >= jjs.length) {
 			return null;
 		}
-
 		return jjs[index];
 	}
 
@@ -146,6 +146,7 @@ public class JoyFactory {
 		}
 
 		for(int i = 0; i < jjs.length; i++) {
+			jjs[i].open();
 			if(jjs[i].isDeviceOpen()) {
 				return jjs[i];
 			}

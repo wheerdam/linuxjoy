@@ -357,7 +357,7 @@ public class MonitorWindow extends javax.swing.JFrame {
 				j.close();
 			}
 			j = JoyFactory.get(cmbDevices.getSelectedIndex());
-			j.reset();
+			j.open();
 			c.setTotalAxes(j.getNumAxes());
 			c.setTotalButtons(j.getNumButtons());
 			j.setCallback(new JoyEventCallback(this, c));
