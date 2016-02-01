@@ -83,7 +83,7 @@ The joystick information has the following encoding for each byte:
 |:---:|:--------------:|:-----------------:|:----:|
 |  -  | Number of Axes | Number of Buttons |  ID  |
 
-`JoyFactory.enumerate()` will return `null` if no joysticks were found. It will return a value of -1 for a specific entry if it was unable to gather information about that particular controller. Use `JoyFactory.get(index)` to get a `LinuxJoystick` handle to the device and start jamming. If you do not want to enumerate the devices manually and just want to get the first device `JoyFactory` can detect and use, use the `JoyFactory.getFirstUsableDevice()` as in the previous example code to get your joystick handle. This function will return `null` if it can not find any device to use.
+`JoyFactory.enumerate()` will return `null` if no joysticks were found. It will return a value of -1 for a specific entry if it was unable to gather information about that particular controller. Use `JoyFactory.get(index)` to get a `LinuxJoystick` handle to the device, open it, and start jamming. If you do not want to enumerate the devices manually and just want to get the first device `JoyFactory` can detect and use, use the `JoyFactory.getFirstUsableDevice()` as in the previous example code to get your joystick handle. This function will return `null` if it can not find any device to use.
 
 ## Other Platforms
 
@@ -91,7 +91,7 @@ LinuxJoystick has a [native library interface](native-api.md) and a [Windows imp
 
 Note: the `poll()` function of the native library is non-blocking and will return immediately. As long as your Java program uses the polling thread, this should be a minor issue other than an increase in CPU usage.
 
-The native library development files are in the `LinuxJoystick/native` directory. `org_bbi_linuxjoy_NoJoy.h` is the header that has the JNI function signatures of the Java native functions. `winxinput.cpp` is the C++ source that implements this interface and uses Windows XInput API to access the game controllers. A Visual Studio 2015 solution is provided in `LinuxJoystick/native/njnative` to build the `njnative.dll` Windows library.
+The native library development files are in the `LinuxJoystick/native` directory. `org_bbi_linuxjoy_NoJoy.h` is the header that has the JNI function signatures of the Java native functions. A Visual Studio 2015 solution is provided in `LinuxJoystick/native/njnative-xinput` to build the `njnative.dll` Windows library.
 
 See the [native-api document](native-api.md) for more information about the LinuxJoystick native API and the [windows document](windows.md) for information about the Windows XInput native library. A [Linux native library](LinuxJoystick/native/njnative-linux) is also available if the user prefers a non-blocking `poll()` function in Linux.
 
