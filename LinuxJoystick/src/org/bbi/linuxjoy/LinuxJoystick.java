@@ -121,8 +121,9 @@ public class LinuxJoystick {
 	}
 
 	/**
-	 * Stop the polling thread. Note that this will also close the file and
-	 * the open function will need to be called again
+	 * Stop the polling thread. This does not interrupt the thread if
+	 * it is currently blocking on read. Use close() to interrupt the
+	 * thread and close the device.
 	 */
 	public void stopPollingThread() {
 		pt.stopPolling();
