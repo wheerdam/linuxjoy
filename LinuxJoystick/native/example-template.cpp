@@ -33,7 +33,7 @@ JNIEXPORT jboolean JNICALL Java_org_bbi_linuxjoy_NoJoy_closeNativeDevice
 }
 
 JNIEXPORT jbyteArray JNICALL Java_org_bbi_linuxjoy_NoJoy_setNativeProperty
-  (JNIEnv *env, jclass cls, jint index, jint index, jint index)
+  (JNIEnv *env, jclass cls, jint index, jint key, jint value)
 {
 
 }
