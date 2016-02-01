@@ -83,7 +83,9 @@ The user can access the event fields as defined in [Linux Joystick API documenta
 
 ## The JoyFactory Class
 
-The `JoyFactory` class provides an enumeration and hides platform-specific procedures to access the controllers in the system. `JoyFactory` will enumerate and use `LinuxJoystick` directly if it detects that it is running in Linux. It will use the [native library interface `NoJoy`](native-api.md) otherwise. This behavior can be overridden to always use the `NoJoy` native library by setting the `JoyFactory.ALWAYS_USE_NATIVE` boolean variable to `true`.
+The `JoyFactory` class provides an enumeration and hides platform-specific procedures to access the controllers in the system. `JoyFactory` will enumerate and use `LinuxJoystick` directly if it detects that it is running in Linux. It will use the [native library interface `NoJoy`](native-api.md) otherwise.
+
+`JoyFactory` default behavior can be overridden to always use the `NoJoy` native library even in Linux by setting the `JoyFactory.ALWAYS_USE_NATIVE` boolean variable to `true`.
 
 ### Enumeration
 
