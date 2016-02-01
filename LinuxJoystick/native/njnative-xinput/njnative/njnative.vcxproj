@@ -118,7 +118,7 @@
     <ClInclude Include="..\..\org_bbi_linuxjoy_NoJoy.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\winxinput.cpp" />
+    <ClCompile Include="..\winxinput.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

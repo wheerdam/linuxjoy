@@ -20,7 +20,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\winxinput.cpp">
+    <ClCompile Include="..\winxinput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

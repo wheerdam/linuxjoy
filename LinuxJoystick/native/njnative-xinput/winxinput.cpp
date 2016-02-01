@@ -15,7 +15,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "org_bbi_linuxjoy_NoJoy.h"
+#include "../org_bbi_linuxjoy_NoJoy.h"
 #include <jni.h>
 #include <stdio.h>
 #include <windows.h>

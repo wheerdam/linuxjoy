@@ -1,1 +1,0 @@
-java -cp ..\..\dist\LinuxJoystick.jar;. -Djava.library.path=..\njnative\x64\Release %1 %2 %3 %4
