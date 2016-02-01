@@ -83,7 +83,7 @@ The user can access the event fields as defined in [Linux Joystick API documenta
 
 ## The JoyFactory Class
 
-The `JoyFactory` class provides an enumeration and hides platform-specific procedures to access the controllers in the system. `JoyFactory` will enumerate and use `LinuxJoystick` directly if it detects that it is running in Linux. It will use the [native library interface `NoJoy`](native-api.md) otherwise.
+The `JoyFactory` class provides an enumeration and hides platform-specific procedures to access the controllers in the system. `JoyFactory` will enumerate and use `LinuxJoystick` directly if it detects that it is running in Linux. It will use the [native library interface `NoJoy`](native-api.md) otherwise. This behavior can be overridden to always use the `NoJoy` native library by setting the `JoyFactory.ALWAYS_USE_NATIVE` boolean variable to `true`.
 
 ### Enumeration
 
@@ -105,10 +105,6 @@ Use the `JoyFactory.get(int index)` function to get a `LinuxJoystick` reference 
 **Note:** `JoyFactory` currently does not support device identifier look-up in Linux and will always return a generic ID. The buttons and axes will be correctly reported.
 
 `JoyFactory` has the `getFirstUsableDevice()` function that will enumerate (if it has not been done already) and open and return a `LinuxJoystick` object of the first controller that has a valid ID to the caller. This function is useful if all the user wants to do is to just attempt to get a controller that is connected to the computer and go from there. The function will return `null` if there is no device that can be used.
-
-### ALWAYS_USE_NATIVE
-
-`JoyFactory` can be forced to always try to use the native library by setting the `JoyFactory.ALWAYS_USE_NATIVE` field to `true`.
 
 ## Extending LinuxJoystick
 
