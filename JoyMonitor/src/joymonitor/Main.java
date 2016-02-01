@@ -30,6 +30,10 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+		if(args.length > 0 && args[0].equals("--native")) {
+			JoyFactory.ALWAYS_USE_NATIVE = true;
+		}
+
         (new MonitorWindow()).setVisible(true);
     }
 
