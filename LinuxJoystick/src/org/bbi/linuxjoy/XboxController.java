@@ -30,18 +30,18 @@ public class XboxController {
     public static final int B = 1;
     public static final int X = 2;
     public static final int Y = 3;
-    public static final int LB = 4;
-    public static final int RB = 5;
+    public static final int LS = 4;
+    public static final int RS = 5;
     public static final int BACK = 6;
     public static final int START = 7;
     public static final int LOGO = 8;
-    public static final int LS = 9;
-    public static final int RS = 10;
+    public static final int LTHUMB = 9;
+    public static final int RTHUMB = 10;
 
-    public static final int LS_X = 0;
-    public static final int LS_Y = 1;
-    public static final int RS_X = 3;
-    public static final int RS_Y = 4;
+    public static final int LTHUMB_X = 0;
+    public static final int LTHUMB_Y = 1;
+    public static final int RTHUMB_X = 3;
+    public static final int RTHUMB_Y = 4;
     public static final int D_X = 6;
     public static final int D_Y = 7;
     public static final int LT = 2;
@@ -57,20 +57,20 @@ public class XboxController {
     }
 
     // button mapping
-    public static boolean A(LinuxJoystick j)      { return j.getButtonState(0);    }
-    public static boolean B(LinuxJoystick j)      { return j.getButtonState(1);    }
-    public static boolean X(LinuxJoystick j)      { return j.getButtonState(2);    }
-    public static boolean Y(LinuxJoystick j)      { return j.getButtonState(3);    }
-    public static boolean LB(LinuxJoystick j)     { return j.getButtonState(4);    }
-    public static boolean RB(LinuxJoystick j)     { return j.getButtonState(5);    }
-    public static boolean BACK(LinuxJoystick j)   { return j.getButtonState(6);    }
-    public static boolean START(LinuxJoystick j)  { return j.getButtonState(7);    }
-    public static boolean LOGO(LinuxJoystick j)   { return j.getButtonState(8);    }
-    public static boolean LS(LinuxJoystick j)     { return j.getButtonState(9);    }
-    public static boolean RS(LinuxJoystick j)     { return j.getButtonState(10);   }
+    public static boolean A(LinuxJoystick j)		{ return j.getButtonState(0);    }
+    public static boolean B(LinuxJoystick j)		{ return j.getButtonState(1);    }
+    public static boolean X(LinuxJoystick j)		{ return j.getButtonState(2);    }
+    public static boolean Y(LinuxJoystick j)		{ return j.getButtonState(3);    }
+    public static boolean LS(LinuxJoystick j)		{ return j.getButtonState(4);    }
+    public static boolean RS(LinuxJoystick j)		{ return j.getButtonState(5);    }
+    public static boolean BACK(LinuxJoystick j)		{ return j.getButtonState(6);    }
+    public static boolean START(LinuxJoystick j)	{ return j.getButtonState(7);    }
+    public static boolean LOGO(LinuxJoystick j)		{ return j.getButtonState(8);    }
+    public static boolean LTHUMB(LinuxJoystick j)	{ return j.getButtonState(9);    }
+    public static boolean RTHUMB(LinuxJoystick j)	{ return j.getButtonState(10);   }
 
     // axes
-    public static double LS_X(LinuxJoystick j) { // negative is left, positive is right
+    public static double LTHUMB_X(LinuxJoystick j) { // negative is left, positive is right
         double v = (double) j.getAxisState(0) / 32767;
         if(v > deadZone || v < -deadZone) {
             return v;
@@ -79,7 +79,7 @@ public class XboxController {
         }
     }
 
-    public static double LS_Y(LinuxJoystick j) { // negative is forward, positive is backward
+    public static double LTHUMB_Y(LinuxJoystick j) { // negative is forward, positive is backward
         double v = (double) j.getAxisState(1) / 32767.0;
         if(v > deadZone || v < -deadZone) {
             return v;
@@ -88,7 +88,7 @@ public class XboxController {
         }
     }
 
-    public static double RS_X(LinuxJoystick j) { // negative is left, positive is right
+    public static double RTHUMB_X(LinuxJoystick j) { // negative is left, positive is right
         double v = (double) j.getAxisState(3) / 32767.0;
         if(v > deadZone || v < -deadZone) {
             return v;
@@ -97,7 +97,7 @@ public class XboxController {
         }
     }
 
-    public static double RS_Y(LinuxJoystick j) { // negative is forward, positive is backward
+    public static double RTHUMB_Y(LinuxJoystick j) { // negative is forward, positive is backward
         double v = (double) j.getAxisState(4) / 32767.0;
         if(v > deadZone || v < -deadZone) {
             return v;
@@ -143,7 +143,7 @@ public class XboxController {
     }
     
     public static void printHeader() {
-        System.out.println("A  B  X  Y  LB RB BK ST LG LS RS  LS_X  LS_Y  RS_X  RS_Y  D_X   D_Y   LT    RT");
+        System.out.println("A  B  X  Y  LB RB BK ST LG LS RS  LTHUMB_X  LTHUMB_Y  RTHUMB_X  RTHUMB_Y  D_X   D_Y   LT    RT");
     }
 
     public static void printValues(LinuxJoystick j) {
@@ -151,8 +151,8 @@ public class XboxController {
                    (B(j) ? "V" : " ") + "  " +
                    (X(j) ? "V" : " ") + "  " +
                    (Y(j) ? "V" : " ") + "  " +
-                   (LB(j) ? "V" : " ") + "  " +
-                   (RB(j) ? "V" : " ") + "  " +
+                   (LS(j) ? "V" : " ") + "  " +
+                   (RS(j) ? "V" : " ") + "  " +
                    (BACK(j) ? "V" : " ") + "  " +
                    (START(j) ? "V" : " ") + "  " +
                    (LOGO(j) ? "V" : " ") + "  " +
@@ -160,10 +160,10 @@ public class XboxController {
                    (RS(j) ? "V" : " ") + "  " +
                    "";
 
-        l += String.format("% .2f ", LS_X(j)) +
-             String.format("% .2f ", LS_Y(j)) +
-             String.format("% .2f ", RS_X(j)) +
-             String.format("% .2f ", RS_Y(j)) +
+        l += String.format("% .2f ", LTHUMB_X(j)) +
+             String.format("% .2f ", LTHUMB_Y(j)) +
+             String.format("% .2f ", RTHUMB_X(j)) +
+             String.format("% .2f ", RTHUMB_Y(j)) +
              String.format("% .2f ", D_X(j)) +
              String.format("% .2f ", D_Y(j)) +
              String.format("% .2f ", LT(j)) +
