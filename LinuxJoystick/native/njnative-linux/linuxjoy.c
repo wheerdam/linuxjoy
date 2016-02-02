@@ -49,16 +49,14 @@ JNIEXPORT jboolean JNICALL Java_org_bbi_linuxjoy_NoJoy_openNativeDevice
   (JNIEnv *env, jobject obj, jint index)
 {
 	int i;
-	char file_index[8];
-	char path[256] = "/dev/input/js";
+	char path[256];
 
 	if(index < 0 || index >= device_count){
 		printf("njnative[%d]: invalid index\n", index);
 		return JNI_FALSE;
 	} else {
 		i = index_map[index];  // get our file #
-		snprintf(file_index, 8, "%d", i);
-		strncat(path, file_index, 256);
+		snprintf(path, 256, "/dev/input/js%d", i);
 		fd[index] = open(path, O_RDONLY | O_NONBLOCK);
 		if(fd[index] == -1) {
 			printf("njnative[%d]: failed to open %s\n", index, path);
@@ -87,8 +85,6 @@ JNIEXPORT jintArray JNICALL Java_org_bbi_linuxjoy_NoJoy_enumerate
 {
 	int i, fd;
 	char buttons, axes;
-	char file_index[8];
-	char prefix[] = "/dev/input/js";
 	char path[256];
 	int joyinfo[MAX_DEVICES];
 
@@ -97,10 +93,7 @@ JNIEXPORT jintArray JNICALL Java_org_bbi_linuxjoy_NoJoy_enumerate
 
 	// iterate through /dev/input/jsXX
 	for(i = 0; i < MAX_DEVICES; i++) {
-		path[0] = 0;
-		strncat(path, prefix, 256);
-		snprintf(file_index, 16, "%d", i);
-		strncat(path, file_index, 256);
+		snprintf(path, 256, "/dev/input/js%d", i);
 		fd = open (path, O_RDONLY | O_NONBLOCK);
 		
 		// we have a device file we can open
