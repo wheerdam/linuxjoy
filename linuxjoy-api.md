@@ -17,7 +17,7 @@ public boolean isDeviceOpen()
 public int getNumButtons()
 public int getNumAxes()
 public int getAxisState(int index)
-public int getButtonState(int index)
+public boolean getButtonState(int index)
 public boolean isChanged()
 
 public void setCallback(LinuxJoystickEventCallback cb)
