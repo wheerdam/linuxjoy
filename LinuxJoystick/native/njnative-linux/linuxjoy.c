@@ -28,6 +28,25 @@ static int fd[MAX_DEVICES];
 static int index_map[MAX_DEVICES];
 static int device_count = 0;
 
+/*
+ * The following is an array of identifier string that we recognize and will
+ * be mapped with the ID field of the joyinfo array that the enumerate 
+ * function will return. The identifier string of the device is acquired by 
+ * using the JSIOCGNAME ioctl on the joystick file handle. The enumerate 
+ * function will iterate through this array and assign the index if it finds
+ * a match.
+ *
+ * An identifier entry can not be longer than 255 characters. Make sure that
+ * this list maps with JoyFactory's ID list.
+ */
+
+#define KNOWN_DEVICES 2
+
+static char *identifiers[] = {
+	"Unknown",
+	"Microsoft X-Box 360 pad"
+};
+
 JNIEXPORT jbyteArray JNICALL Java_org_bbi_linuxjoy_NoJoy_nativePoll
   (JNIEnv *env, jobject obj, jint index)
 {
@@ -83,9 +102,10 @@ JNIEXPORT jboolean JNICALL Java_org_bbi_linuxjoy_NoJoy_isNativeDeviceOpen
 JNIEXPORT jintArray JNICALL Java_org_bbi_linuxjoy_NoJoy_enumerate
   (JNIEnv *env, jclass cls)
 {
-	int i, fd;
+	int i, j, fd;
 	char buttons, axes;
 	char path[256];
+	char name[256];
 	int joyinfo[MAX_DEVICES];
 
 	// reset device count
@@ -96,19 +116,31 @@ JNIEXPORT jintArray JNICALL Java_org_bbi_linuxjoy_NoJoy_enumerate
 		snprintf(path, 256, "/dev/input/js%d", i);
 		fd = open (path, O_RDONLY | O_NONBLOCK);
 		
-		// we have a device file we can open
 		if(fd != -1) {			
+			// we have a device file we can open
 			index_map[device_count] = i;  // map our count with file #
 			ioctl(fd, JSIOCGBUTTONS, &buttons);
 			ioctl(fd, JSIOCGAXES, &axes);
-			joyinfo[device_count] = 0x00; // report generic
+
+			if (ioctl(fd, JSIOCGNAME(sizeof(name)), name) < 0)
+				strncpy(name, "Unknown", sizeof(name));	
+
+			joyinfo[device_count] = 0; // default generic
+
+			// find if we have a matching identifier string
+			for(j = 0; j < KNOWN_DEVICES; j++) {
+				if (strcmp(name, identifiers[j]) == 0) {
+					joyinfo[device_count] = j;
+				}
+			}	
+
 			joyinfo[device_count] |= (buttons << 8);			
 			joyinfo[device_count] |= (axes << 16);
-			printf("njnative[%d]: %s detected (%d buttons, %d axes)\n",
-				 device_count, path, buttons, axes);
+
+			printf("njnative[%d]: %s - \"%s\" (%d buttons, %d axes)\n",
+				 device_count, path, name, buttons, axes);
 			device_count++;
 			close(fd);
-			fd = -1;
 		}
 	}
 	printf("njnative: %d devices found\n", device_count);
