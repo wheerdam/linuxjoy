@@ -37,7 +37,7 @@ static int device_count = 0;
  * a match.
  *
  * An identifier entry can not be longer than 255 characters. Make sure that
- * this list maps with JoyFactory's ID list.
+ * this list corresponds to the list defined in linuxjoy-api document.
  */
 
 #define KNOWN_DEVICES 2
